@@ -1,0 +1,140 @@
+.balsamiq-sans-regular {
+  font-family: "Balsamiq Sans", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.balsamiq-sans-bold {
+  font-family: "Balsamiq Sans", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.balsamiq-sans-regular-italic {
+  font-family: "Balsamiq Sans", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.balsamiq-sans-bold-italic {
+  font-family: "Balsamiq Sans", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+/*general css*/
+
+body {
+    font-family: "Balsamiq Sans", serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #212261;
+    color: #F8B5F4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: url("images/cursor.png"), default; 
+}
+
+header {
+    text-align: center;
+    margin-top: 50px;
+}
+
+h1, h2 {
+    font-family: "Balsamiq Sans", serif;
+    
+    margin: 0;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #7B9DF0;
+}
+
+main {
+    width: 80%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+section {
+    margin: 20px 0;
+}
+
+h3 {
+    font-size: 1.2rem;
+    border-bottom: 1px solid #FBF5C4;
+    padding-bottom: 5px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #FBF5C4;
+    font-size: 1rem;
+}
+
+a:hover {
+    text-decoration: underline;
+    color:#E6F6FE;
+    cursor: url("images/hover.png"), default; 
+
+}
+
+footer {
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #7B9DF0;
+}
+
+/* Image Styling */
+img {
+    max-width: 100%;
+    height: auto; 
+    display: block; 
+    margin: 20px auto; 
+    padding: 10px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+
+/* back button */
+a.link {
+    all: unset;
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #F8B5F4;
+    padding: 8px 12px;
+    border: 2px solid #F8B5F4;
+    border-radius: 10px;
+    transition: background 0.3s, color 0.3s;
+}
+
+a.link:hover {
+    background: #F8B5F4;
+    color: #212261;
+    cursor: url("images/hover.png"), default; 
+    
+}
+
