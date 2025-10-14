@@ -19,10 +19,11 @@
   --prop-panel: rgba(255, 255, 255, 0.6);
 }
 
-/* -------- BASE -------- */
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 
+/* Base background grid */
 body {
   background:
     repeating-linear-gradient(0deg,   var(--grid) 0 1px, transparent 1px 24px),
@@ -63,17 +64,20 @@ body.theme-light.cursor-clock * {
 
 .stage {
   position: relative;
-  width: min(460px, 55vw);
-  max-width: 500px;
-  aspect-ratio: 1 / 1;
-  margin: clamp(24px, 6vw, 48px) auto 0;
-  background: transparent !important;
+  overflow: hidden;
 }
 
-.stage canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
+/* Inner frame highlight */
+.wrap::after { display: none; }
+
+/* -------- CLOCK STAGE (p5 canvas parent) -------- */
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent !important; /* ENSURE transparency */
 }
 
 .overlay {
@@ -85,7 +89,7 @@ body.theme-light.cursor-clock * {
   padding: 0 clamp(28px, 8vw, 120px) clamp(36px, 6vw, 72px);
 }
 
-/* -------- LIGHT/DARK -------- */
+/* -------- LIGHT/DARK TOGGLE -------- */
 .mode-toggle {
   position: fixed;
   top: 12px;
@@ -139,11 +143,14 @@ body.theme-light.cursor-clock * {
   margin: clamp(22px, 4.5vw, 48px) auto 0;
   font-family: "Kode Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
                "Liberation Mono", "Courier New", monospace;
+
+  /* ✅ ONLY HERE: semi-transparent background */
   background: var(--prop-panel);
   border-top: 1px solid var(--line);
   backdrop-filter: blur(3px);
 }
 
+/* Each prophecy line */
 .prophecy-line {
   min-height: 42px;
   line-height: 1.45;

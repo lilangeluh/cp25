@@ -57,7 +57,7 @@
     const day = d.getDate();            // 1–31
     const year = d.getFullYear();
 
-    // 48/120 system
+    // Hands live in 48/120 system. Include seconds for smooth sweep.
     const hourUnits   = (hh24 * 2) + (mm60 * (2 / 60)) + (ss60 * (2 / 3600));
     const minuteUnits = (mm60 * 2) + (ss60 * (2 / 60));
 
@@ -72,7 +72,7 @@
     };
   }
 
-  // ---------- FORTUNES TEXT HEREERE ----------
+  // ---------- Oracle text ----------
   const LEX = {
     temporal: [
       (d) => `At ${d.time},`,
@@ -260,7 +260,7 @@
   const baseInstruction = (d) => rc(LEX.imp)(d);
   const baseGlitchLine  = (d) => rc(LEX.glitch)(d);
 
-  // Numerology
+  // Numerology (ignores seconds for patterns)
   function sameDigits(hhmm) {
     const d = hhmm.replace(":", "");
     return d.length === 4 && d.split("").every((x) => x === d[0]);
@@ -379,11 +379,11 @@
     let mode = "realtime";
     let modeStart = 0;
 
-    // Random target
+    // Random target & fake ticking
     let randomT = randomStamp();   // {hour, minute, second, month, day, year, timeStr, detailStr}
     let fakeH = randomT.hour, fakeM = randomT.minute, fakeS = randomT.second;
 
-    // Glitchers 
+    // Glitchers (time length now 8 = "HH:MM:SS")
     let timeGlitcher = makeGlitcher(8, 160);
     let detailGlitcher = makeGlitcher(randomT.detailStr.length, 130);
 
@@ -454,9 +454,7 @@
       p.pop();
     }
 
-    // Hands drawing it out
-    let clockScale = 1;
-
+    // Hands drawing
     function drawClock(cx, cy, hourValue, minuteValue, secondValue, spinBonus = 0, palette) {
       const sc = (value) => value * clockScale;
       const PA = palette || pal();
@@ -527,7 +525,7 @@
       elGlitch.classList.remove("fadeout");
       clearTimeout(backTimer);
 
-      const hhmm = st.timeStr.slice(0,5); // HH:MM for numerology
+      const hhmm = st.timeStr.slice(0,5); // HH:MM 
       let texts = {
         prophecy: baseProphecy({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
         instruction: baseInstruction({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
@@ -597,7 +595,7 @@
       } else if (mode === "glitchToRandom") {
         // hands spin fast; digits glitch
         const elapsed = (now - modeStart) / 1000;
-        spinBonus = elapsed * 60 * 3; // fast spin (tweak 3→faster/slower)
+        spinBonus = elapsed * 60 * 3; // fast spin 
         displayTime = timeGlitcher(now);
         displayDetail = detailGlitcher(now);
 
@@ -636,7 +634,7 @@
         if (tProg.done && dProg.done) {
           mode = "randomIdle";
           modeStart = now;
-          
+          // start typing prophecies based on this random time
           spinPropheciesFromStamp({
             hour: randomT.hour, minute: randomT.minute, second: randomT.second,
             month: randomT.month, day: randomT.day, year: randomT.year,
