@@ -63,7 +63,7 @@
     const day = d.getDate();            // 1–31
     const year = d.getFullYear();
 
-    // Hands live in 48/120 system. Include seconds for smooth sweep.
+    // Hands live in 48/120 system
     const hourUnits   = (hh24 * 2) + (mm60 * (2 / 60)) + (ss60 * (2 / 3600));
     const minuteUnits = (mm60 * 2) + (ss60 * (2 / 60));
 
@@ -78,7 +78,7 @@
     };
   }
 
-  // ---------- Oracle text ----------
+  // ---------- oowaaaa oracle text ----------
   const LEX = {
     temporal: [
       (d) => `At ${d.time},`,
@@ -266,7 +266,7 @@
   const baseInstruction = (d) => rc(LEX.imp)(d);
   const baseGlitchLine  = (d) => rc(LEX.glitch)(d);
 
-  // Numerology (ignores seconds for patterns)
+  // Numerology 
   function sameDigits(hhmm) {
     const d = hhmm.replace(":", "");
     return d.length === 4 && d.split("").every((x) => x === d[0]);
@@ -321,7 +321,7 @@
     setTimeout(() => el.classList.add("fadeout"), delayMs);
   }
 
-  // Smooth per-character glitch + shuffle-to-target
+  // shuffle-to-target
   const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*()[]{}<>?/+=";
   function makeGlitcher(len, intervalMs = 140) {
     const chars = new Array(len).fill(" ");
@@ -385,11 +385,11 @@
     let mode = "realtime";
     let modeStart = 0;
 
-    // Random target & fake ticking
+    
     let randomT = randomStamp();   // {hour, minute, second, month, day, year, timeStr, detailStr}
     let fakeH = randomT.hour, fakeM = randomT.minute, fakeS = randomT.second;
 
-    // Glitchers (time length now 8 = "HH:MM:SS")
+    // Glitchers
     let timeGlitcher = makeGlitcher(8, 160);
     let detailGlitcher = makeGlitcher(randomT.detailStr.length, 130);
 
@@ -463,7 +463,7 @@
       p.pop();
     }
 
-    // Hands drawing
+    // Handsssssss
     function drawClock(cx, cy, hourValue, minuteValue, secondValue, spinBonus = 0, palette) {
       const PA = palette || pal();
       const t = p.millis();
@@ -504,7 +504,7 @@
       }
       p.pop();
 
-      // Noise ring
+      
       p.push();
       p.noFill(); p.stroke(...PA.noise); p.strokeWeight(1.4);
       const rr = 180; p.beginShape();
@@ -533,7 +533,7 @@
       elGlitch.classList.remove("fadeout");
       clearTimeout(backTimer);
 
-      const hhmm = st.timeStr.slice(0,5); // HH:MM for numerology
+      const hhmm = st.timeStr.slice(0,5); // HH:MM 
       let texts = {
         prophecy: baseProphecy({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
         instruction: baseInstruction({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
@@ -596,7 +596,7 @@
       let clockHours = 0;
       let clockMinutes = 0;
       let clockSeconds = 0;
-      let spinBonus = 0; // extra units/s for spin during glitch
+      let spinBonus = 0; 
 
       if (mode === "realtime") {
         const rt = realTimeNow();
@@ -609,7 +609,7 @@
       } else if (mode === "glitchToRandom") {
         // hands spin fast; digits glitch
         const elapsed = (now - modeStart) / 1000;
-        spinBonus = elapsed * 60 * 3; // fast spin (tweak 3→faster/slower)
+        spinBonus = elapsed * 60 * 3; // fast spin 
         displayTime = timeGlitcher(now);
         displayDetail = detailGlitcher(now);
 
@@ -648,7 +648,7 @@
         if (tProg.done && dProg.done) {
           mode = "randomIdle";
           modeStart = now;
-          // start typing prophecies based on this random time
+          // prophecies based on this
           spinPropheciesFromStamp({
             hour: randomT.hour, minute: randomT.minute, second: randomT.second,
             month: randomT.month, day: randomT.day, year: randomT.year,
@@ -657,10 +657,10 @@
         }
 
       } else if (mode === "randomIdle") {
-        // advance fake time smoothly
+        
         if (p.frameCount % 1 === 0) {
           const dt = p.deltaTime / 1000;
-          // tick fake seconds
+          
           let s = fakeS + dt;
           while (s >= 1) { fakeS += 1; s -= 1; }
           if (fakeS >= 60) { fakeS = 0; fakeM = (fakeM + 1) % 120; if (fakeM === 0) fakeH = (fakeH + 1) % 48; }
@@ -677,11 +677,11 @@
 
       } else if (mode === "glitchBack") {
         const elapsed = (now - modeStart) / 1000;
-        spinBonus = elapsed * 60 * 3; // spin again while returning
+        spinBonus = elapsed * 60 * 3; 
         displayTime = timeGlitcher(now);
 
         const rt = realTimeNow();
-        // ensure detail glitcher length matches target length
+        
         if (detailGlitcher(0).length !== rt.displayDetail.length) {
           detailGlitcher = makeGlitcher(rt.displayDetail.length, 130);
         }
