@@ -13,20 +13,14 @@
   const elInstruction = document.getElementById("instruction");
   const elGlitch = document.getElementById("glitch");
   const modeBtn = document.getElementById("modeToggle");
-  const htmlRoot = document.documentElement;
   const stageEl = document.getElementById("stage");
   const cursorState = { centerX: 0, centerY: 0, radius: 0 };
 
   const BG_OPTS = {
     darkness: 0.58,    // 0 → fully transparent, 1 → darkest
-    speed: 0.075,      // animation speed multiplier
-    grainDensity: 0.0032, // number of speckles per pixel
-    contrast: 0.55,    // higher → more variance between light/dark
-  };
-
-  const setReadoutOffset = (px) => {
-    if (!Number.isFinite(px)) return;
-    htmlRoot.style.setProperty("--readout-offset", `${Math.max(0, Math.round(px))}px`);
+    speed: 0.075,      
+    grainDensity: 0.0032, 
+    contrast: 0.55,    
   };
 
   // Theme toggle
@@ -40,7 +34,7 @@
   function randomStamp() {
     const h = Math.floor(rr(0, 48));
     const m = Math.floor(rr(0, 120));
-    // we’ll *display* seconds on a 0–59 scale and tick them forward
+    
     const s = Math.floor(rr(0, 60));
     const month = Math.floor(rr(-2, 15));
     const day = Math.floor(rr(0, 41));
@@ -63,7 +57,7 @@
     const day = d.getDate();            // 1–31
     const year = d.getFullYear();
 
-    // Hands live in 48/120 system. Include seconds for smooth sweep.
+    // 48/120 system
     const hourUnits   = (hh24 * 2) + (mm60 * (2 / 60)) + (ss60 * (2 / 3600));
     const minuteUnits = (mm60 * 2) + (ss60 * (2 / 60));
 
@@ -78,7 +72,7 @@
     };
   }
 
-  // ---------- Oracle text ----------
+  // ---------- FORTUNES TEXT HEREERE ----------
   const LEX = {
     temporal: [
       (d) => `At ${d.time},`,
@@ -266,7 +260,7 @@
   const baseInstruction = (d) => rc(LEX.imp)(d);
   const baseGlitchLine  = (d) => rc(LEX.glitch)(d);
 
-  // Numerology (ignores seconds for patterns)
+  // Numerology
   function sameDigits(hhmm) {
     const d = hhmm.replace(":", "");
     return d.length === 4 && d.split("").every((x) => x === d[0]);
@@ -280,7 +274,7 @@
     return { allSame: sameDigits(hhmm), triples, has13, four44 };
   }
   function augmentForNumerology(d, texts) {
-    // d.time is HH:MM (we pass that)
+    // d.time is HH:MM
     const f = luckyFlags(d.time);
     let { prophecy, instruction, glitch } = texts;
     if (f.allSame) {
@@ -321,7 +315,7 @@
     setTimeout(() => el.classList.add("fadeout"), delayMs);
   }
 
-  // Smooth per-character glitch + shuffle-to-target
+  // shuffle-to-target
   const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*()[]{}<>?/+=";
   function makeGlitcher(len, intervalMs = 140) {
     const chars = new Array(len).fill(" ");
@@ -385,11 +379,11 @@
     let mode = "realtime";
     let modeStart = 0;
 
-    // Random target & fake ticking
+    // Random target
     let randomT = randomStamp();   // {hour, minute, second, month, day, year, timeStr, detailStr}
     let fakeH = randomT.hour, fakeM = randomT.minute, fakeS = randomT.second;
 
-    // Glitchers (time length now 8 = "HH:MM:SS")
+    // Glitchers 
     let timeGlitcher = makeGlitcher(8, 160);
     let detailGlitcher = makeGlitcher(randomT.detailStr.length, 130);
 
@@ -397,7 +391,7 @@
     function mount() {
       const parent = document.getElementById("stage");
       const w = parent.clientWidth || 800;
-      const h = parent.clientHeight || 560;
+      const h = parent.clientHeight || w || 560;
       const c = p.createCanvas(w, h);
       c.parent(parent);
       p.pixelDensity(1);
@@ -406,11 +400,8 @@
     function resize() {
       const parent = document.getElementById("stage");
       const w = parent.clientWidth || 800;
-      const h = parent.clientHeight || 560;
+      const h = parent.clientHeight || w || 560;
       p.resizeCanvas(w, h);
-      const cyFactor = h < 620 ? 0.22 : 0.27;
-      const newOffset = Math.max(h * cyFactor + 190, h * 0.6);
-      setReadoutOffset(newOffset);
     }
 
     function drawDynamicBackground(PA, opts = BG_OPTS) {
@@ -463,8 +454,11 @@
       p.pop();
     }
 
-    // Hands drawing
+    // Hands drawing it out
+    let clockScale = 1;
+
     function drawClock(cx, cy, hourValue, minuteValue, secondValue, spinBonus = 0, palette) {
+      const sc = (value) => value * clockScale;
       const PA = palette || pal();
       const t = p.millis();
       const phase = (t - modeStart) / 1000;
@@ -480,47 +474,47 @@
       p.push();
       p.translate(cx, cy);
 
-      // Halo
-      const haloR = 156 + Math.sin(t * 0.001) * 5;
+      
+      const haloR = sc(156) + Math.sin(t * 0.001) * sc(5);
       p.noFill(); p.stroke(...PA.halo); p.strokeWeight(2); p.circle(0, 0, haloR * 2);
 
-      // Rings
+      
       p.stroke(...PA.ring); p.strokeWeight(1.4);
-      p.circle(0, 0, 244);
-      p.circle(0, 0, 208);
-      p.circle(0, 0, 132);
+      p.circle(0, 0, sc(244));
+      p.circle(0, 0, sc(208));
+      p.circle(0, 0, sc(132));
 
-      // Ticks
+      
       p.push();
       p.stroke(...PA.stroke1); p.strokeWeight(1.6);
       for (let i = 0; i < 48; i++) {
         const a = p.TAU * (i / 48) - p.HALF_PI;
-        p.line(Math.cos(a) * 122, Math.sin(a) * 122, Math.cos(a) * 132, Math.sin(a) * 132);
+        p.line(Math.cos(a) * sc(122), Math.sin(a) * sc(122), Math.cos(a) * sc(132), Math.sin(a) * sc(132));
       }
       p.stroke(...PA.stroke2); p.strokeWeight(2.1);
       for (let i = 0; i < 120; i += 5) {
         const a = p.TAU * (i / 120) - p.HALF_PI;
-        p.line(Math.cos(a) * 200, Math.sin(a) * 200, Math.cos(a) * 208, Math.sin(a) * 208);
+        p.line(Math.cos(a) * sc(200), Math.sin(a) * sc(200), Math.cos(a) * sc(208), Math.sin(a) * sc(208));
       }
       p.pop();
 
-      // Noise ring
+      
       p.push();
       p.noFill(); p.stroke(...PA.noise); p.strokeWeight(1.4);
-      const rr = 180; p.beginShape();
+      const rr = sc(180); p.beginShape();
       for (let a = 0; a < p.TAU; a += p.TAU / 180) {
         const n = p.noise(Math.cos(a + phase * 0.5) * 1.2, Math.sin(a + phase * 0.5) * 1.2, 0.02);
-        const r = rr + (n - 0.5) * 7;
+        const r = rr + (n - 0.5) * sc(7);
         p.vertex(Math.cos(a) * r, Math.sin(a) * r);
       }
       p.endShape(p.CLOSE);
       p.pop();
 
-      // Hands (optionally add spinBonus during glitch)
+      
       p.stroke(...PA.handHour); p.strokeWeight(4.1);
-      p.line(0, 0, Math.cos(hAng) * 86, Math.sin(hAng) * 86);
+      p.line(0, 0, Math.cos(hAng) * sc(86), Math.sin(hAng) * sc(86));
       p.stroke(...PA.handMinute); p.strokeWeight(3);
-      p.line(0, 0, Math.cos(mAng) * 120, Math.sin(mAng) * 120);
+      p.line(0, 0, Math.cos(mAng) * sc(120), Math.sin(mAng) * sc(120));
       p.noStroke(); p.fill(PA.center); p.circle(0, 0, 6);
 
       p.pop();
@@ -562,15 +556,10 @@
     }
     let backTimer = null;
 
-    // p5 core
+    
     p.setup = () => {
       mount();
       modeStart = p.millis();
-      const parent = document.getElementById("stage");
-      const canvasH = parent?.clientHeight || p.height || window.innerHeight || 700;
-      const cyFactor = canvasH < 620 ? 0.22 : 0.27;
-      const initialOffset = Math.max(canvasH * cyFactor + 190, canvasH * 0.6);
-      setReadoutOffset(initialOffset);
     };
     p.windowResized = () => { resize(); };
     p.draw = () => {
@@ -580,15 +569,14 @@
 
       const now = p.millis();
       const cx = p.width / 2;
-      const cyFactor = p.height < 620 ? 0.22 : 0.27;
-      const cy = p.height * cyFactor;
-      const readoutOffsetPx = Math.max(cy + 190, p.height * 0.6);
-      setReadoutOffset(readoutOffsetPx);
+      const cy = p.height / 2;
+      const diameter = Math.min(p.width, p.height);
+      clockScale = Math.min(0.88, Math.max(0.55, diameter / 540));
       if (stageEl) {
         const stageRect = stageEl.getBoundingClientRect();
         cursorState.centerX = stageRect.left + cx;
         cursorState.centerY = stageRect.top + cy;
-        cursorState.radius = Math.min(p.width, p.height) * 0.32;
+        cursorState.radius = clockScale * 208 + clockScale * 20;
       }
 
       let displayTime = "";
@@ -596,7 +584,7 @@
       let clockHours = 0;
       let clockMinutes = 0;
       let clockSeconds = 0;
-      let spinBonus = 0; // extra units/s for spin during glitch
+      let spinBonus = 0; 
 
       if (mode === "realtime") {
         const rt = realTimeNow();
@@ -620,7 +608,7 @@
         if (now - modeStart > 1500) {
           mode = "randomReveal";
           modeStart = now;
-          // prepare fresh random target & fake ticking bases
+          
           randomT = randomStamp();
           fakeH = randomT.hour; fakeM = randomT.minute; fakeS = randomT.second;
           // adjust glitcher lengths for the reveal target lengths
@@ -637,7 +625,7 @@
 
         // during reveal, still spin but decelerate
         const sec = elapsed / 1000;
-        spinBonus = (1.2 - Math.min(1.2, sec)) * 80; // quick decay
+        spinBonus = (1.2 - Math.min(1.2, sec)) * 80; 
         const randomHour = randomT.hour % 24;
         const randomMinute = (randomT.minute / 2) % 60;
         const randomSecond = randomT.second % 60;
@@ -648,7 +636,7 @@
         if (tProg.done && dProg.done) {
           mode = "randomIdle";
           modeStart = now;
-          // start typing prophecies based on this random time
+          
           spinPropheciesFromStamp({
             hour: randomT.hour, minute: randomT.minute, second: randomT.second,
             month: randomT.month, day: randomT.day, year: randomT.year,
@@ -657,10 +645,10 @@
         }
 
       } else if (mode === "randomIdle") {
-        // advance fake time smoothly
+        
         if (p.frameCount % 1 === 0) {
           const dt = p.deltaTime / 1000;
-          // tick fake seconds
+          
           let s = fakeS + dt;
           while (s >= 1) { fakeS += 1; s -= 1; }
           if (fakeS >= 60) { fakeS = 0; fakeM = (fakeM + 1) % 120; if (fakeM === 0) fakeH = (fakeH + 1) % 48; }
@@ -677,11 +665,11 @@
 
       } else if (mode === "glitchBack") {
         const elapsed = (now - modeStart) / 1000;
-        spinBonus = elapsed * 60 * 3; // spin again while returning
+        spinBonus = elapsed * 60 * 3; 
         displayTime = timeGlitcher(now);
 
         const rt = realTimeNow();
-        // ensure detail glitcher length matches target length
+        
         if (detailGlitcher(0).length !== rt.displayDetail.length) {
           detailGlitcher = makeGlitcher(rt.displayDetail.length, 130);
         }
