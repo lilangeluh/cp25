@@ -1,11 +1,18 @@
-/* -------- THEMES -------- */
+
+
+/* -------- THEME VARIABLES -------- */
 :root {
   --bg: #0b0b0c;
   --ink: #f2f2f2;
   --muted: #9aa0a6;
   --line: #1a1a1c;
   --clock-panel: rgba(12, 14, 22, 0.18);
+  --readout-offset: 360px;
+
+  /* Global grid color (dark mode) */
   --grid: rgba(66, 66, 70, 0.35);
+
+  /* Semi-transparent panel (used ONLY for prophecy section) */
   --prop-panel: rgba(0, 0, 0, 0.25);
 }
 
@@ -15,6 +22,7 @@
   --muted: #4b515a;
   --line: #d5d7db;
   --clock-panel: rgba(250, 250, 255, 0.2);
+  --readout-offset: 360px;
   --grid: rgba(180, 180, 185, 0.35);
   --prop-panel: rgba(255, 255, 255, 0.6);
 }
@@ -23,7 +31,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 
-/* Base background grid */
+/* background grid */
 body {
   background:
     repeating-linear-gradient(0deg,   var(--grid) 0 1px, transparent 1px 24px),
@@ -31,11 +39,12 @@ body {
     var(--bg);
   color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
+  align-items: stretch;
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 body.theme-dark.cursor-clock,
@@ -48,7 +57,7 @@ body.theme-light.cursor-clock * {
   cursor: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%0A%20%20%3Ccircle%20cx%3D%2716%27%20cy%3D%2716%27%20r%3D%2712%27%20fill%3D%27none%27%20stroke%3D%27%230b0b0c%27%20stroke-width%3D%272%27/%3E%0A%20%20%3Cpath%20fill%3D%27%230b0b0c%27%20d%3D%27M16%208.8c-2.64%200-4.66%201.76-4.66%204.02%200%201.4.72%202.46%201.98%203.14l1.14.6c.74.38.94.72.94%201.28v1h1.84v-1.12c0-1.42-.54-2.26-1.86-2.96l-1-.52c-.62-.32-.92-.74-.92-1.26%200-.96.86-1.68%202.18-1.68%201.28%200%202.14.64%202.32%201.64h1.96c-.2-2.16-2.02-3.84-4.92-3.84Z%27/%3E%0A%20%20%3Ccircle%20cx%3D%2716%27%20cy%3D%2723%27%20r%3D%271.4%27%20fill%3D%27%230b0b0c%27/%3E%0A%3C/svg%3E") 16 16, pointer;
 }
 
-/* -------- TYPE -------- */
+/* -------- TYPOGRAPHY -------- */
 .heading { font-family: 'Instrument Serif', Georgia, serif; }
 .mono {
   font-family: "Kode Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
@@ -57,12 +66,9 @@ body.theme-light.cursor-clock * {
 
 /* -------- LAYOUT -------- */
 .wrap {
-  flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.stage {
+  width: 100%;
+  height: 100%;
+  background: transparent;
   position: relative;
   overflow: hidden;
 }
@@ -70,7 +76,7 @@ body.theme-light.cursor-clock * {
 /* Inner frame highlight */
 .wrap::after { display: none; }
 
-/* -------- CLOCK STAGE (p5 canvas parent) -------- */
+/* -------- CLOCK STAGE  -------- */
 .stage {
   position: absolute;
   inset: 0;
@@ -81,15 +87,19 @@ body.theme-light.cursor-clock * {
 }
 
 .overlay {
-  flex: 1 0 auto;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
-  gap: clamp(16px, 3.5vw, 32px);
-  padding: 0 clamp(28px, 8vw, 120px) clamp(36px, 6vw, 72px);
+  gap: clamp(32px, 7vw, 90px);
+  padding: clamp(32px, 6vw, 96px) clamp(28px, 8vw, 120px) clamp(36px, 7vw, 110px);
 }
 
-/* -------- LIGHT/DARK TOGGLE -------- */
+/* -------- LIGHT N DARK -------- */
 .mode-toggle {
   position: fixed;
   top: 12px;
@@ -104,63 +114,66 @@ body.theme-light.cursor-clock * {
   z-index: 5;
 }
 
-/* -------- READOUT -------- */
+/* -------- READOUT (Digital time/date) -------- */
 .readout {
   pointer-events: auto;
   display: grid;
   justify-items: center;
   gap: 4px;
   text-align: center;
-  padding: clamp(10px, 2vw, 18px) clamp(16px, 3.4vw, 30px);
+  padding: clamp(12px, 2.6vw, 22px) clamp(20px, 4vw, 40px);
   background: var(--clock-panel);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
   backdrop-filter: blur(10px);
-  max-width: min(420px, 58vw);
-  width: 100%;
-  margin: clamp(18px, 4vw, 32px) auto 0;
+  max-width: min(520px, 64vw);
+  margin: calc(var(--readout-offset, 200px) + 24px) auto clamp(22px, 6vw, 72px);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
 }
 
 .time {
-  font-size: clamp(42px, 6vw, 74px);
-  line-height: 1.05;
+  font-size: clamp(48px, 7vw, 92px);
+  line-height: 1.1;
 }
 
 .detail {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
 }
 
-/* -------- PROPHECY -------- */
+/* -------- PROPHECY PANEL -------- */
 .prophecy-wrap {
   pointer-events: auto;
-  padding: 12px 18px 18px;
+  padding: 14px 18px 18px;
   display: grid;
   grid-auto-rows: auto;
   gap: 10px;
-  width: min(680px, 78vw);
-  margin: clamp(22px, 4.5vw, 48px) auto 0;
+  width: min(760px, 85vw);
+  margin: 0 auto;
   font-family: "Kode Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
                "Liberation Mono", "Courier New", monospace;
 
-  /* ✅ ONLY HERE: semi-transparent background */
+  
   background: var(--prop-panel);
   border-top: 1px solid var(--line);
   backdrop-filter: blur(3px);
 }
 
-/* Each prophecy line */
+/* Each line */
 .prophecy-line {
-  min-height: 42px;
-  line-height: 1.45;
-  font-size: 15px;
+  min-height: 48px;
+  line-height: 1.6;
+  font-size: 16px;
   color: var(--ink);
   text-align: center;
+
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: anywhere;
+
+  border-left: none;
   padding: 0 12px;
+
   transition: opacity 0.75s linear;
 }
 
@@ -168,35 +181,28 @@ body.theme-light.cursor-clock * {
   opacity: 0;
 }
 
-/* -------- RESPONSIVE -------- */
-@media (max-width: 900px) {
-  .stage {
-    width: min(440px, 78vw);
-    margin-top: clamp(18px, 7vw, 36px);
+@media (max-width: 820px) {
+  .overlay {
+    padding: clamp(28px, 6vw, 64px) clamp(20px, 6vw, 48px) clamp(32px, 9vw, 96px);
+    gap: clamp(30px, 12vh, 80px);
   }
   .readout {
-    max-width: min(420px, 86vw);
-  }
-}
-
-@media (max-width: 640px) {
-  .stage {
-    width: min(360px, 88vw);
+    max-width: min(480px, 84vw);
+    margin: calc(var(--readout-offset, 180px) + 24px) auto clamp(22px, 6vw, 64px);
   }
   .time {
-    font-size: clamp(36px, 12vw, 64px);
-  }
-  .prophecy-line {
-    font-size: 14px;
-    min-height: 38px;
+    font-size: clamp(44px, 14vw, 84px);
   }
 }
 
-@media (max-height: 720px) {
-  .stage {
-    margin-top: clamp(16px, 5vh, 32px);
-  }
+@media (max-height: 760px) {
   .overlay {
-    gap: clamp(14px, 5vh, 28px);
+    gap: clamp(36px, 18vh, 112px);
+  }
+  .readout {
+    margin: calc(var(--readout-offset, 170px) + 24px) auto clamp(26px, 7vw, 90px);
+  }
+  .time {
+    font-size: clamp(42px, 8vw, 82px);
   }
 }
