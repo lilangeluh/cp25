@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Erratic Clock</title>
+
+  <!-- Fonts + p5 -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;0,700;1,400&family=Kode+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
+
+  <link rel="stylesheet" href="dice.css" />
+</head>
+<body class="theme-dark">
+  <button id="modeToggle" class="mode-toggle" aria-label="Toggle color mode">◐</button>
+
+  <div class="wrap">
+    
+    <div id="stage" class="stage"></div>
+
+    <div class="overlay">
+      
+      <div class="readout">
+        <div id="timeReadout" class="time heading"></div>
+        <div id="detailReadout" class="detail mono"></div>
+      </div>
+
+      
+      <section class="prophecy-wrap mono">
+        <div id="prophecy" class="prophecy-line"></div>
+        <div id="instruction" class="prophecy-line"></div>
+        <div id="glitch" class="prophecy-line"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="dice.js"></script>
+</body>
+</html>
