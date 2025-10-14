@@ -27,11 +27,11 @@
   --prop-panel: rgba(255, 255, 255, 0.6);
 }
 
-/* -------- BASE -------- */
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 
-/* Base background grid */
+/* background grid */
 body {
   background:
     repeating-linear-gradient(0deg,   var(--grid) 0 1px, transparent 1px 24px),
@@ -64,7 +64,7 @@ body.theme-light.cursor-clock * {
                "Liberation Mono", "Courier New", monospace;
 }
 
-/* -------- FRAME / LAYOUT -------- */
+/* -------- LAYOUT -------- */
 .wrap {
   width: 100%;
   height: 100%;
@@ -76,7 +76,7 @@ body.theme-light.cursor-clock * {
 /* Inner frame highlight */
 .wrap::after { display: none; }
 
-/* -------- CLOCK STAGE (p5 canvas parent) -------- */
+/* -------- CLOCK STAGE  -------- */
 .stage {
   position: absolute;
   inset: 0;
@@ -99,7 +99,7 @@ body.theme-light.cursor-clock * {
   padding: clamp(32px, 6vw, 96px) clamp(28px, 8vw, 120px) clamp(36px, 7vw, 110px);
 }
 
-/* -------- LIGHT/DARK TOGGLE -------- */
+/* -------- LIGHT N DARK -------- */
 .mode-toggle {
   position: fixed;
   top: 12px;
@@ -153,13 +153,13 @@ body.theme-light.cursor-clock * {
   font-family: "Kode Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
                "Liberation Mono", "Courier New", monospace;
 
-  /* ✅ ONLY HERE: semi-transparent background */
+  
   background: var(--prop-panel);
   border-top: 1px solid var(--line);
   backdrop-filter: blur(3px);
 }
 
-/* Each prophecy line */
+/* Each line */
 .prophecy-line {
   min-height: 48px;
   line-height: 1.6;
