@@ -13,9 +13,18 @@
   const elInstruction = document.getElementById("instruction");
   const elGlitch = document.getElementById("glitch");
   const modeBtn = document.getElementById("modeToggle");
+  const languageBtn = document.getElementById("languageToggle");
+  const languageMenu = document.getElementById("languageMenu");
   const htmlRoot = document.documentElement;
   const stageEl = document.getElementById("stage");
   const cursorState = { centerX: 0, centerY: 0, radius: 0 };
+  const typewriterTimers = new WeakMap();
+  const autoFadeTimers = new WeakMap();
+  const pendingTimeouts = new Set();
+  const translationCache = new Map();
+  let lastProphecyPayload = null;
+  let prophecyRequestId = 0;
+  let currentLanguage = "en";
 
   const BG_OPTS = {
     darkness: 0.58,    // 0 → fully transparent, 1 → darkest
@@ -23,6 +32,296 @@
     grainDensity: 0.0032, // number of speckles per pixel
     contrast: 0.55,    // higher → more variance between light/dark
   };
+
+  const LANGUAGE_NAME_MAP = {
+    english: "en",
+    spanish: "es",
+    french: "fr",
+    german: "de",
+    italian: "it",
+    portuguese: "pt",
+    russian: "ru",
+    japanese: "ja",
+    chinese: "zh",
+    "chinese (simplified)": "zh-CN",
+    "chinese (traditional)": "zh-TW",
+    korean: "ko",
+    arabic: "ar",
+    hindi: "hi",
+    bengali: "bn",
+    turkish: "tr",
+    swedish: "sv",
+    norwegian: "no",
+    danish: "da",
+    finnish: "fi",
+    polish: "pl",
+    dutch: "nl",
+    greek: "el",
+    czech: "cs",
+    hungarian: "hu",
+    romanian: "ro",
+    indonesian: "id",
+    vietnamese: "vi",
+    thai: "th",
+    swahili: "sw",
+    filipino: "fil",
+    malay: "ms",
+    persian: "fa",
+    farsi: "fa",
+    hebrew: "he",
+    ukrainian: "uk",
+    catalan: "ca",
+    galician: "gl"
+  };
+
+  const AVAILABLE_LANGUAGES = [
+    { code: "en", label: "English" },
+    { code: "es", label: "Español" },
+    { code: "fr", label: "Français" },
+    { code: "de", label: "Deutsch" },
+    { code: "it", label: "Italiano" },
+    { code: "pt", label: "Português" },
+    { code: "ru", label: "Русский" },
+    { code: "ja", label: "日本語" },
+    { code: "zh-CN", label: "简体中文" },
+    { code: "zh-TW", label: "繁體中文" },
+    { code: "ko", label: "한국어" },
+    { code: "ar", label: "العربية" },
+    { code: "hi", label: "हिन्दी" },
+    { code: "vi", label: "Tiếng Việt" },
+    { code: "th", label: "ไทย" },
+    { code: "tr", label: "Türkçe" },
+    { code: "sv", label: "Svenska" },
+    { code: "pl", label: "Polski" },
+    { code: "nl", label: "Nederlands" },
+    { code: "id", label: "Bahasa Indonesia" },
+  ];
+
+  const TRANSLATE_ENDPOINT = "https://translate.googleapis.com/translate_a/single";
+
+  function normalizeLanguage(input) {
+    if (input == null) return null;
+    const trimmed = String(input).trim();
+    if (!trimmed) return null;
+    const lower = trimmed.toLowerCase();
+    if (LANGUAGE_NAME_MAP[lower]) {
+      return LANGUAGE_NAME_MAP[lower];
+    }
+    const normalized = trimmed.replace(/_/g, "-");
+    try {
+      const canonical = Intl.getCanonicalLocales(normalized);
+      if (canonical && canonical.length) {
+        return canonical[0];
+      }
+    } catch (err) {
+      // fall back to manual validation below
+    }
+    if (/^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(normalized)) {
+      return normalized.toLowerCase();
+    }
+    return null;
+  }
+
+  function updateLanguageButton() {
+    if (!languageBtn) return;
+    const display = currentLanguage.split("-")[0].toUpperCase();
+    languageBtn.textContent = display;
+    languageBtn.title = `Change language (current: ${currentLanguage})`;
+    languageBtn.setAttribute("aria-label", `Change language (current: ${currentLanguage})`);
+    languageBtn.dataset.lang = currentLanguage;
+  }
+
+  let languageMenuButtons = [];
+  let languageMenuOpen = false;
+  let lastMenuIndex = 0;
+
+  function updateLanguageMenuSelection() {
+    languageMenuButtons.forEach((btn, index) => {
+      const active = normalizeLanguage(btn.dataset.lang) === currentLanguage;
+      btn.dataset.active = active ? "true" : "false";
+      btn.setAttribute("aria-checked", active ? "true" : "false");
+      if (active) {
+        lastMenuIndex = index;
+      }
+    });
+  }
+
+  function renderLanguageMenu() {
+    if (!languageMenu) return;
+    languageMenu.innerHTML = "";
+    languageMenuButtons = [];
+    AVAILABLE_LANGUAGES.forEach(({ code, label }) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.dataset.lang = code;
+      btn.setAttribute("role", "menuitemradio");
+      btn.setAttribute("aria-checked", "false");
+      btn.textContent = label;
+      const codeBadge = document.createElement("span");
+      codeBadge.textContent = code.toUpperCase();
+      btn.appendChild(codeBadge);
+      btn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        closeLanguageMenu();
+        setLanguage(code);
+      });
+      languageMenu.appendChild(btn);
+      languageMenuButtons.push(btn);
+    });
+    updateLanguageMenuSelection();
+  }
+
+  function focusMenuIndex(index) {
+    if (!languageMenuButtons.length) return;
+    const clamped = Math.max(0, Math.min(languageMenuButtons.length - 1, index));
+    languageMenuButtons[clamped].focus();
+    lastMenuIndex = clamped;
+  }
+
+  function openLanguageMenu() {
+    if (!languageMenu || languageMenuOpen) return;
+    languageMenu.classList.add("is-open");
+    languageMenu.setAttribute("aria-hidden", "false");
+    languageBtn?.setAttribute("aria-expanded", "true");
+    languageMenuOpen = true;
+    updateLanguageMenuSelection();
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(() => focusMenuIndex(lastMenuIndex));
+    } else {
+      focusMenuIndex(lastMenuIndex);
+    }
+  }
+
+  function closeLanguageMenu() {
+    if (!languageMenu || !languageMenuOpen) return;
+    languageMenu.classList.remove("is-open");
+    languageMenu.setAttribute("aria-hidden", "true");
+    languageBtn?.setAttribute("aria-expanded", "false");
+    languageMenuOpen = false;
+  }
+
+  function toggleLanguageMenu() {
+    if (languageMenuOpen) {
+      closeLanguageMenu();
+    } else {
+      openLanguageMenu();
+    }
+  }
+
+  function setLanguage(langCode) {
+    const normalized = normalizeLanguage(langCode);
+    if (!normalized) return;
+    if (normalized === currentLanguage) return;
+    currentLanguage = normalized;
+    htmlRoot.lang = currentLanguage;
+    updateLanguageButton();
+    updateLanguageMenuSelection();
+    if (lastProphecyPayload?.stamp) {
+      spinPropheciesFromStamp(lastProphecyPayload.stamp, { reuseTexts: true });
+    }
+  }
+
+  function handleDocumentPointerDown(event) {
+    if (!languageMenuOpen) return;
+    if (languageBtn?.contains(event.target)) return;
+    if (languageMenu?.contains(event.target)) return;
+    closeLanguageMenu();
+  }
+
+  function handleWindowKeyDown(event) {
+    if (!languageMenuOpen) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeLanguageMenu();
+      languageBtn?.focus();
+      return;
+    }
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!languageMenuButtons.length) return;
+      const direction = event.key === "ArrowDown" ? 1 : -1;
+      const currentIndex = languageMenuButtons.findIndex((btn) => btn === document.activeElement);
+      const nextIndex = currentIndex >= 0 ? currentIndex + direction : lastMenuIndex + direction;
+      if (nextIndex < 0) {
+        focusMenuIndex(languageMenuButtons.length - 1);
+      } else if (nextIndex >= languageMenuButtons.length) {
+        focusMenuIndex(0);
+      } else {
+        focusMenuIndex(nextIndex);
+      }
+    }
+    if (event.key === "Enter" || event.key === " ") {
+      if (document.activeElement && languageMenu?.contains(document.activeElement)) {
+        event.preventDefault();
+        const target = document.activeElement;
+        const lang = target.dataset?.lang;
+        closeLanguageMenu();
+        setLanguage(lang);
+      }
+    }
+  }
+
+  function scheduleTimeout(fn, delayMs = 0) {
+    const id = setTimeout(() => {
+      pendingTimeouts.delete(id);
+      fn();
+    }, delayMs);
+    pendingTimeouts.add(id);
+    return id;
+  }
+
+  function clearScheduledTimeouts() {
+    pendingTimeouts.forEach((id) => clearTimeout(id));
+    pendingTimeouts.clear();
+  }
+
+  async function translateText(text, targetLang) {
+    if (!text || !targetLang || targetLang === "en") return text ?? "";
+    const cacheKey = `${targetLang}::${text}`;
+    if (translationCache.has(cacheKey)) {
+      return translationCache.get(cacheKey);
+    }
+    if (typeof fetch !== "function") {
+      return text;
+    }
+    const request = (async () => {
+      try {
+        const url = `${TRANSLATE_ENDPOINT}?client=gtx&sl=auto&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`Translation request failed (${res.status})`);
+        }
+        const data = await res.json();
+        if (!Array.isArray(data)) {
+          return text;
+        }
+        const translated = data[0]?.map?.((chunk) => chunk?.[0] ?? "").join("") ?? "";
+        return translated || text;
+      } catch (err) {
+        console.warn("Translation error:", err);
+        return text;
+      }
+    })();
+    translationCache.set(cacheKey, request);
+    const resolved = await request;
+    translationCache.set(cacheKey, resolved);
+    return resolved;
+  }
+
+  async function translateTexts(textMap, targetLang) {
+    if (!textMap) return {};
+    if (!targetLang || targetLang === "en") {
+      return { ...textMap };
+    }
+    const entries = await Promise.all(
+      Object.entries(textMap).map(async ([key, value]) => {
+        const translated = await translateText(value, targetLang);
+        return [key, translated];
+      })
+    );
+    return Object.fromEntries(entries);
+  }
 
   const setReadoutOffset = (px) => {
     if (!Number.isFinite(px)) return;
@@ -35,6 +334,29 @@
     b.classList.toggle("theme-dark");
     b.classList.toggle("theme-light");
   });
+
+  currentLanguage = normalizeLanguage(htmlRoot.lang || currentLanguage) || currentLanguage;
+  htmlRoot.lang = currentLanguage;
+  renderLanguageMenu();
+  updateLanguageButton();
+  updateLanguageMenuSelection();
+
+  if (languageBtn) {
+    languageBtn.setAttribute("aria-haspopup", "menu");
+    languageBtn.setAttribute("aria-expanded", "false");
+    languageBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      toggleLanguageMenu();
+    });
+    languageBtn.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLanguageMenu();
+      }
+    });
+  }
+  document.addEventListener("pointerdown", handleDocumentPointerDown);
+  window.addEventListener("keydown", handleWindowKeyDown);
 
   // ---------- Random stamp (48h/120m space; display HH:MM:SS) ----------
   function randomStamp() {
@@ -305,20 +627,37 @@
 
   // Typewriter + fade
   function typewrite(el, text, cps = 20, onDone) {
+    if (!el) return null;
+    const safeText = text == null ? "" : String(text);
+    if (typewriterTimers.has(el)) {
+      clearInterval(typewriterTimers.get(el));
+      typewriterTimers.delete(el);
+    }
     el.classList.remove("fadeout");
     el.textContent = "";
     let i = 0;
     const timer = setInterval(() => {
-      el.textContent = text.slice(0, i++);
-      if (i > text.length) {
+      el.textContent = safeText.slice(0, i++);
+      if (i > safeText.length) {
         clearInterval(timer);
+        typewriterTimers.delete(el);
         onDone && onDone();
       }
     }, Math.max(12, 1000 / cps));
+    typewriterTimers.set(el, timer);
     return timer;
   }
   function autoFade(el, delayMs = 10000) {
-    setTimeout(() => el.classList.add("fadeout"), delayMs);
+    if (!el) return;
+    if (autoFadeTimers.has(el)) {
+      clearTimeout(autoFadeTimers.get(el));
+      autoFadeTimers.delete(el);
+    }
+    const timer = setTimeout(() => {
+      el.classList.add("fadeout");
+      autoFadeTimers.delete(el);
+    }, delayMs);
+    autoFadeTimers.set(el, timer);
   }
 
   // shuffle-to-target
@@ -527,38 +866,83 @@
     }
 
     // Prophecies
-    function spinPropheciesFromStamp(st) {
+    function spinPropheciesFromStamp(st, opts = {}) {
+      if (!st) return;
       elProphecy.classList.remove("fadeout");
       elInstruction.classList.remove("fadeout");
       elGlitch.classList.remove("fadeout");
       clearTimeout(backTimer);
+      backTimer = null;
+      clearScheduledTimeouts();
 
-      const hhmm = st.timeStr.slice(0,5); // HH:MM 
-      let texts = {
-        prophecy: baseProphecy({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
-        instruction: baseInstruction({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
-        glitch: baseGlitchLine({ time: hhmm, month: st.month, day: st.day, year: st.year, minute: st.minute, hour: st.hour }),
+      const hhmm = st.timeStr ? st.timeStr.slice(0, 5) : `${pad2(st.hour ?? 0)}:${pad2(Math.floor((st.minute ?? 0) / 2))}`;
+      const context = {
+        time: hhmm,
+        month: st.month,
+        day: st.day,
+        year: st.year,
+        minute: st.minute,
+        hour: st.hour,
       };
-      texts = augmentForNumerology({ time: hhmm }, texts);
+
+      let baseTexts;
+      if (opts.reuseTexts && lastProphecyPayload?.base) {
+        baseTexts = { ...lastProphecyPayload.base };
+      } else {
+        baseTexts = {
+          prophecy: baseProphecy(context),
+          instruction: baseInstruction(context),
+          glitch: baseGlitchLine(context),
+        };
+        baseTexts = augmentForNumerology({ time: hhmm }, baseTexts);
+        lastProphecyPayload = {
+          stamp: {
+            hour: st.hour,
+            minute: st.minute,
+            second: st.second,
+            month: st.month,
+            day: st.day,
+            year: st.year,
+            timeStr: st.timeStr,
+            detailStr: st.detailStr,
+          },
+          base: { ...baseTexts },
+        };
+      }
 
       const fadeDelay = 11000;
-      const startGlitch = () => {
-        typewrite(elGlitch, texts.glitch, 15, () => {
-          autoFade(elGlitch, fadeDelay);
-          clearTimeout(backTimer);
-          backTimer = setTimeout(() => { mode = "glitchBack"; modeStart = p.millis(); }, 16500);
+      const requestId = ++prophecyRequestId;
+
+      const renderTexts = (texts) => {
+        const startGlitch = () => {
+          typewrite(elGlitch, texts.glitch, 15, () => {
+            autoFade(elGlitch, fadeDelay);
+            clearTimeout(backTimer);
+            backTimer = setTimeout(() => { mode = "glitchBack"; modeStart = p.millis(); }, 16500);
+          });
+        };
+        const startInstruction = () => {
+          typewrite(elInstruction, texts.instruction, 16, () => {
+            autoFade(elInstruction, fadeDelay);
+            scheduleTimeout(startGlitch, 250);
+          });
+        };
+        typewrite(elProphecy, texts.prophecy, 18, () => {
+          autoFade(elProphecy, fadeDelay);
+          scheduleTimeout(startInstruction, 250);
         });
       };
-      const startInstruction = () => {
-        typewrite(elInstruction, texts.instruction, 16, () => {
-          autoFade(elInstruction, fadeDelay);
-          setTimeout(startGlitch, 250);
+
+      translateTexts(baseTexts, currentLanguage)
+        .then((translated) => {
+          if (requestId !== prophecyRequestId) return;
+          renderTexts(translated);
+        })
+        .catch((err) => {
+          console.warn("Translation pipeline error:", err);
+          if (requestId !== prophecyRequestId) return;
+          renderTexts(baseTexts);
         });
-      };
-      typewrite(elProphecy, texts.prophecy, 18, () => {
-        autoFade(elProphecy, fadeDelay);
-        setTimeout(startInstruction, 250);
-      });
     }
     let backTimer = null;
 
