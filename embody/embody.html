@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instructions for Feeling</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@1,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #ffffff;
+        --diagram-line: #1a1a1a;
+        --diagram-muted: rgba(0, 0, 0, 0.08);
+        --diagram-shadow: rgba(15, 23, 42, 0.08);
+        --accent: #cfe3ff;
+        --accent-ink: #3b5b91;
+        --ink: #141414;
+        --secondary: rgba(20, 20, 20, 0.68);
+        --soft-outline: rgba(0, 0, 0, 0.08);
+        --label-bg: rgba(255, 255, 255, 0.92);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .top-bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 48px;
+        border-bottom: 1px solid var(--soft-outline);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+      }
+
+      .top-bar__title {
+        font-size: 1.125rem;
+        letter-spacing: 0.32rem;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .top-bar__actions {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .parts-button {
+        border: 1px solid var(--ink);
+        background: transparent;
+        border-radius: 999px;
+        padding: 10px 22px;
+        font-size: 0.85rem;
+        letter-spacing: 0.08rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      }
+
+      .parts-button:hover,
+      .parts-button:focus-visible {
+        outline: none;
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .progress {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+      }
+
+      .progress__label {
+        font-size: 0.78rem;
+        letter-spacing: 0.08rem;
+        text-transform: uppercase;
+        color: var(--secondary);
+      }
+
+      .progress__bar {
+        width: 160px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(20, 20, 20, 0.08);
+        overflow: hidden;
+      }
+
+      .progress__fill {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: var(--accent-ink);
+        opacity: 0.58;
+        transition: width 0.5s ease;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(32px, 6vw, 72px);
+        background: linear-gradient(180deg, #ffffff 0%, #f6f7fb 100%);
+      }
+
+      .diagram-stage {
+        position: relative;
+        width: min(780px, 92vw);
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+      }
+
+      .diagram-wrapper {
+        position: relative;
+        width: min(540px, 70vw);
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+        perspective: 1400px;
+      }
+
+      .diagram {
+        width: 100%;
+        max-width: 520px;
+        transition: transform 0.8s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.8s ease;
+        filter: drop-shadow(0px 28px 50px rgba(15, 23, 42, 0.08));
+      }
+
+      .diagram-object {
+        stroke: var(--diagram-line);
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .diagram-segment {
+        fill: rgba(0, 0, 0, 0.03);
+        stroke-dasharray: var(--dash, 420);
+        stroke-dashoffset: var(--dash, 420);
+        animation: drawLine 1.8s ease forwards;
+      }
+
+      .diagram-segment:nth-of-type(1) {
+        animation-delay: 0s;
+      }
+
+      .diagram-segment:nth-of-type(2) {
+        animation-delay: 0.08s;
+      }
+
+      .diagram-segment:nth-of-type(3) {
+        animation-delay: 0.16s;
+      }
+
+      .diagram-segment:nth-of-type(4) {
+        animation-delay: 0.24s;
+      }
+
+      .diagram-segment:nth-of-type(5) {
+        animation-delay: 0.32s;
+      }
+
+      .diagram-segment:nth-of-type(6) {
+        animation-delay: 0.4s;
+      }
+
+      .diagram-segment:nth-of-type(7) {
+        animation-delay: 0.48s;
+      }
+
+      .diagram-detail {
+        fill: none;
+        stroke: rgba(0, 0, 0, 0.32);
+        stroke-dasharray: 320;
+        stroke-dashoffset: 320;
+        animation: drawLine 1.6s ease forwards;
+        animation-delay: 0.4s;
+      }
+
+      .diagram-heartfill {
+        fill: rgba(207, 227, 255, 0.22);
+        stroke: var(--accent-ink);
+        stroke-width: 1.2;
+        stroke-dasharray: 260;
+        stroke-dashoffset: 260;
+        animation: drawLine 1.8s ease forwards;
+        animation-delay: 0.56s;
+      }
+
+      .diagram-segment.glow,
+      .diagram-heartfill.glow {
+        stroke: var(--accent-ink);
+        filter: drop-shadow(0px 0px 10px rgba(82, 130, 210, 0.45));
+        fill: rgba(207, 227, 255, 0.24);
+      }
+
+      @keyframes drawLine {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      .callouts {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .callout {
+        position: absolute;
+        top: var(--callout-top);
+        left: var(--callout-left);
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        pointer-events: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .callout:hover {
+        transform: translate(-50%, -50%) scale(1.02);
+      }
+
+      .callout::before,
+      .callout::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: left center;
+        pointer-events: none;
+      }
+
+      .callout::before {
+        width: var(--line-length, 140px);
+        height: 1px;
+        background: rgba(0, 0, 0, 0.22);
+        transform: translate(-50%, -50%) rotate(var(--line-angle, 0deg));
+        transition: background 0.3s ease, width 0.3s ease;
+      }
+
+      .callout::after {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.32);
+        background: #fff;
+        transform: translate(
+            calc(-50% + var(--line-length, 140px)),
+            calc(-50% + var(--line-offset, 0px))
+          )
+          scale(0.88);
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .callout[data-side="left"] {
+        flex-direction: row-reverse;
+      }
+
+      .callout[data-side="left"]::after {
+        transform: translate(
+            calc(-50% - var(--line-length, 140px)),
+            calc(-50% + var(--line-offset, 0px))
+          )
+          scale(0.88);
+      }
+
+      .callout[data-side="left"] .callout-label {
+        left: auto;
+        right: calc(100% + 18px);
+        text-align: right;
+      }
+
+      .callout[data-side="left"] .callout-number {
+        margin-right: 0;
+        margin-left: 14px;
+      }
+
+      .callout:hover::before,
+      .callout:hover::after,
+      .callout.active::before,
+      .callout.active::after,
+      .callout.completed::before,
+      .callout.completed::after {
+        background: var(--accent-ink);
+        border-color: rgba(59, 91, 145, 0.85);
+      }
+
+      .callout-number {
+        position: relative;
+        border: 1px solid rgba(0, 0, 0, 0.32);
+        background: #fff;
+        color: var(--ink);
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .callout-number:hover,
+      .callout-number:focus-visible,
+      .callout.active .callout-number,
+      .callout.completed .callout-number {
+        outline: none;
+        background: var(--accent);
+        border-color: var(--accent-ink);
+        color: var(--accent-ink);
+        box-shadow: 0 8px 18px rgba(80, 120, 180, 0.18);
+      }
+
+      .callout-label {
+        position: absolute;
+        left: calc(100% + 18px);
+        top: 50%;
+        transform: translateY(-50%) translateY(12px);
+        background: var(--label-bg);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 14px 16px;
+        border-radius: 10px;
+        min-width: 220px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .callout:hover .callout-label,
+      .callout.active .callout-label,
+      .callout:focus-within .callout-label {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
+
+      .manual-step {
+        display: block;
+        font-size: 0.82rem;
+        letter-spacing: 0.06rem;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: var(--secondary);
+      }
+
+      .diary-echo {
+        display: block;
+        font-family: "Playfair Display", "Times New Roman", serif;
+        font-style: italic;
+        font-size: 0.95rem;
+        color: var(--accent-ink);
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(12, 16, 30, 0.12);
+        backdrop-filter: blur(6px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+        z-index: 20;
+      }
+
+      .modal--active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal__dialog {
+        position: relative;
+        width: min(420px, 88vw);
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 38px 40px 44px;
+        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.18);
+        transform: translateY(24px) scale(0.98);
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.45s ease;
+        opacity: 0;
+      }
+
+      .modal--active .modal__dialog {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+
+      .modal__close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        border: none;
+        background: transparent;
+        font-size: 1.4rem;
+        cursor: pointer;
+        color: var(--secondary);
+        transition: color 0.3s ease, transform 0.3s ease;
+      }
+
+      .modal__close:hover,
+      .modal__close:focus-visible {
+        color: var(--accent-ink);
+        transform: rotate(6deg);
+        outline: none;
+      }
+
+      .modal__title {
+        font-size: 1.12rem;
+        letter-spacing: 0.12rem;
+        text-transform: uppercase;
+        margin: 0 0 16px;
+        color: var(--secondary);
+      }
+
+      .modal__body {
+        font-family: "Playfair Display", "Times New Roman", serif;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: rgba(20, 20, 20, 0.88);
+      }
+
+      .modal__body p {
+        margin: 0 0 18px;
+      }
+
+      .modal__body ul {
+        padding-left: 20px;
+        margin: 0;
+        list-style: square;
+      }
+
+      @media (max-width: 880px) {
+        .top-bar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 18px;
+          padding: 20px 26px;
+        }
+
+        .top-bar__actions {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .diagram-stage {
+          width: min(620px, 94vw);
+        }
+      }
+
+      @media (max-width: 620px) {
+        .callout {
+          position: static;
+          transform: none;
+          margin: 18px auto;
+          display: flex;
+          justify-content: center;
+        }
+
+        .callout::before,
+        .callout::after {
+          display: none;
+        }
+
+        .callout-label {
+          position: static;
+          opacity: 1;
+          transform: none;
+          min-width: auto;
+          text-align: center;
+          margin-top: 14px;
+        }
+
+        .callout[data-side="left"] {
+          flex-direction: column;
+        }
+
+        .callouts {
+          position: static;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          margin-top: 24px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0s !important;
+          transition-duration: 0s !important;
+        }
+
+        .diagram {
+          filter: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="top-bar__title">Instructions for Feeling</div>
+      <div class="top-bar__actions">
+        <button class="parts-button" type="button" data-modal="parts">
+          Parts List
+        </button>
+        <div class="progress" aria-live="polite">
+          <span class="progress__label">
+            Assembled 0 / 7 steps
+          </span>
+          <span class="progress__bar"><span class="progress__fill"></span></span>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="diagram-stage" aria-label="Assembly diagram">
+        <div class="diagram-wrapper">
+          <svg
+            class="diagram"
+            viewBox="0 0 400 400"
+            role="presentation"
+            aria-hidden="true"
+          >
+            <g class="diagram-object">
+              <path
+                id="segment-top"
+                class="diagram-segment"
+                d="M200 54 L120 102 L200 150 L280 102 Z"
+                fill="rgba(0,0,0,0.02)"
+              />
+              <path
+                id="segment-left"
+                class="diagram-segment"
+                d="M120 102 L120 210 L200 258 L200 150 Z"
+                fill="rgba(0,0,0,0.04)"
+              />
+              <path
+                id="segment-right"
+                class="diagram-segment"
+                d="M280 102 L280 210 L200 258 L200 150 Z"
+                fill="rgba(0,0,0,0.06)"
+              />
+              <path
+                id="segment-spine"
+                class="diagram-segment"
+                d="M200 150 L168 172 L168 268 L200 288 L232 268 L232 172 Z"
+                fill="rgba(0,0,0,0.03)"
+              />
+              <path
+                id="segment-bridge"
+                class="diagram-segment"
+                d="M160 172 L112 204 L160 234 L208 204 Z"
+                fill="rgba(0,0,0,0.02)"
+              />
+              <path
+                id="segment-valve"
+                class="diagram-segment"
+                d="M240 172 L288 204 L240 234 L192 204 Z"
+                fill="rgba(0,0,0,0.02)"
+              />
+              <path
+                id="segment-base"
+                class="diagram-segment"
+                d="M168 268 L120 238 L120 262 L200 316 L280 262 L280 238 L232 268 L200 288 Z"
+                fill="rgba(0,0,0,0.05)"
+              />
+              <path
+                id="segment-heart"
+                class="diagram-heartfill"
+                d="M200 125 C200 100 228 96 240 112 C250 124 244 150 220 170 C204 182 200 198 200 198 C200 198 196 182 180 170 C156 150 150 124 160 112 C172 96 200 100 200 125 Z"
+              />
+              <path
+                class="diagram-detail"
+                d="M200 150 L160 126"
+              />
+              <path
+                class="diagram-detail"
+                d="M200 150 L240 126"
+              />
+              <path
+                class="diagram-detail"
+                d="M160 204 L160 172"
+              />
+              <path
+                class="diagram-detail"
+                d="M240 204 L240 172"
+              />
+              <path
+                class="diagram-detail"
+                d="M168 268 L168 172"
+              />
+              <path
+                class="diagram-detail"
+                d="M232 268 L232 172"
+              />
+              <circle
+                class="diagram-detail"
+                cx="200"
+                cy="208"
+                r="18"
+                fill="none"
+              />
+              <path
+                class="diagram-detail"
+                d="M200 226 L200 288"
+              />
+            </g>
+          </svg>
+          <div class="callouts">
+            <div
+              class="callout"
+              style="--callout-top: 18%; --callout-left: 78%; --line-angle: -24deg; --line-length: 160px; --line-offset: -6px;"
+              data-target="segment-top"
+              data-title="Step 1 – Unfold the blueprint"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                1
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 1: Unfold the blueprint.</span>
+                <span class="diary-echo">
+                  Step 1a: I still hesitate before opening up.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  I smooth the paper across the table, coaxing the stubborn creases with
+                  the back of my knuckles. The manual suggests confident gestures, yet my
+                  hands keep replaying old revisions. Each line is decisive, while I am
+                  soft and unsure. I breathe into the grid and promise the blueprint I
+                  will try again.
+                </p>
+              </template>
+            </div>
+            <div
+              class="callout"
+              style="--callout-top: 44%; --callout-left: 88%; --line-angle: -10deg; --line-length: 126px; --line-offset: 10px;"
+              data-target="segment-valve"
+              data-title="Step 2 – Align the core struts"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                2
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 2: Align the core struts.</span>
+                <span class="diary-echo">
+                  Step 2b: My angles never line up the first try.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  Two beams meet at a prescribed angle, tidy in the drawing but restless in
+                  my palms. I adjust, realign, and whisper apologies to the space between
+                  them. The manual only notes: ensure symmetry. It forgets to mention the
+                  patience required to let my own expectations settle.
+                </p>
+              </template>
+            </div>
+            <div
+              class="callout"
+              style="--callout-top: 28%; --callout-left: 16%; --line-angle: 164deg; --line-length: 150px; --line-offset: -12px;"
+              data-side="left"
+              data-target="segment-bridge"
+              data-title="Step 3 – Attach piece A to piece B"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                3
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 3: Attach piece A to piece B.</span>
+                <span class="diary-echo">
+                  Step 3b: I wish I could fit together that easily.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  The connection should snap with a satisfying click, the manual says.
+                  Instead I shuffle edges, nudging them into reluctant agreement. In that
+                  friction I hear every conversation where I tried to explain what I felt
+                  and still left a gap. Piece A meets piece B, eventually, and I pretend it
+                  was seamless.
+                </p>
+              </template>
+            </div>
+            <div
+              class="callout"
+              style="--callout-top: 64%; --callout-left: 12%; --line-angle: 156deg; --line-length: 172px; --line-offset: 6px;"
+              data-side="left"
+              data-target="segment-spine"
+              data-title="Step 4 – Fasten the emotional gasket"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                4
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 4: Fasten the emotional gasket.</span>
+                <span class="diary-echo">
+                  Step 4b: The seal only holds when I'm quiet.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  The gasket is a ribbon of silicone, translucent and shy. I press it into
+                  place with the pad of my thumb, afraid of trapping air bubbles that might
+                  hiss later. Silence becomes the lubricant: I hold my breath, count to
+                  eight, and hope the seal believes in me more than I believe in myself.
+                </p>
+              </template>
+            </div>
+            <div
+              class="callout"
+              style="--callout-top: 6%; --callout-left: 48%; --line-angle: -90deg; --line-length: 110px; --line-offset: 0px;"
+              data-target="segment-heart"
+              data-title="Step 5 – Install the pulse conduit"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                5
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 5: Install the pulse conduit.</span>
+                <span class="diary-echo">
+                  Step 5b: I hum to fill the empty channels.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  A slender conduit presses against the heart-shaped chamber, ready to carry
+                  whatever rhythm I can muster. The manual assures a steady flow with proper
+                  alignment; I sing under my breath, a low hum to convince the conduit that
+                  warmth is on the way. Resonance answers from somewhere deeper than the
+                  diagram.
+                </p>
+              </template>
+            </div>
+            <div
+              class="callout"
+              style="--callout-top: 82%; --callout-left: 46%; --line-angle: 96deg; --line-length: 120px; --line-offset: -6px;"
+              data-target="segment-base"
+              data-title="Step 6 – Test the resonance screws"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                6
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 6: Test the resonance screws.</span>
+                <span class="diary-echo">
+                  Step 6b: I tighten until it feels like silence.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  Tiny screws circle the base, each tuned to a different resonance. I turn
+                  them a quarter revolution, listening for a micro shift in the hush. The
+                  manual warns against over-tightening, yet I crave the security of stillness.
+                  When the vibrations quiet, I stop and let the silence rest on my shoulders.
+                </p>
+              </template>
+            </div>
+            <div
+              class="callout"
+              style="--callout-top: 70%; --callout-left: 84%; --line-angle: -42deg; --line-length: 148px; --line-offset: -10px;"
+              data-target="segment-right"
+              data-title="Step 7 – Close the access panel"
+            >
+              <button class="callout-number" type="button" aria-expanded="false">
+                7
+              </button>
+              <div class="callout-label">
+                <span class="manual-step">Step 7: Close the access panel.</span>
+                <span class="diary-echo">
+                  Step 7b: Leaving an opening feels brave.
+                </span>
+              </div>
+              <template class="diary-detail">
+                <p>
+                  The final panel slides into place with a soft metallic sigh. The diagram
+                  says secure firmly; my heart whispers leave it loose. I compromise with a
+                  single latch left undone, a promise that I can return and breathe into the
+                  machinery again when the day requires it.
+                </p>
+              </template>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="modal" id="diary-modal" aria-hidden="true">
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal__close" type="button" aria-label="Close diary entry">
+          &times;
+        </button>
+        <h2 class="modal__title" id="modal-title">Diary Entry</h2>
+        <div class="modal__body"></div>
+      </div>
+    </div>
+    <template id="parts-list-template">
+      <p>
+        Inventory recorded at dawn. Handle each component with a patient pulse.
+      </p>
+      <ul>
+        <li>Piece A — translucent courage bracket</li>
+        <li>Piece B — mirrored patience plate</li>
+        <li>Soft gasket — whisper-weight sealant strip</li>
+        <li>Pulse conduit — braided lumen tubing</li>
+        <li>Resonance screws — seven-tone calibration set</li>
+        <li>Access panel — brushed aluminum memory door</li>
+        <li>Instruction leaf — bilingual tenderness diagram</li>
+      </ul>
+    </template>
+    <script>
+      (() => {
+        const callouts = Array.from(document.querySelectorAll(".callout"));
+        const modal = document.getElementById("diary-modal");
+        const modalBody = modal.querySelector(".modal__body");
+        const modalTitle = modal.querySelector(".modal__title");
+        const modalClose = modal.querySelector(".modal__close");
+        const partsButton = document.querySelector(".parts-button");
+        const progressLabel = document.querySelector(".progress__label");
+        const progressFill = document.querySelector(".progress__fill");
+        const totalSteps = callouts.length;
+        const assembledSteps = new Set();
+        const diagram = document.querySelector(".diagram");
+        const stage = document.querySelector(".diagram-stage");
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+          .matches;
+        let audioCtx = null;
+        let lastSound = 0;
+
+        const ensureAudio = async () => {
+          if (reduceMotion) {
+            return null;
+          }
+          if (!audioCtx) {
+            const Ctx =
+              window.AudioContext ||
+              window.webkitAudioContext ||
+              window.mozAudioContext;
+            if (!Ctx) {
+              return null;
+            }
+            audioCtx = new Ctx();
+          }
+          if (audioCtx.state === "suspended") {
+            try {
+              await audioCtx.resume();
+            } catch (err) {
+              console.warn("Audio resume blocked:", err);
+            }
+          }
+          return audioCtx;
+        };
+
+        const playHoverSound = async () => {
+          if (reduceMotion) {
+            return;
+          }
+          const ctx = await ensureAudio();
+          if (!ctx) {
+            return;
+          }
+          const now = ctx.currentTime;
+          if (now - lastSound < 0.08) {
+            return;
+          }
+          lastSound = now;
+          const duration = 0.22;
+          const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < data.length; i += 1) {
+            const envelope = Math.pow(1 - i / data.length, 3);
+            const noise = (Math.random() * 2 - 1) * 0.4;
+            data[i] = noise * envelope;
+          }
+          const source = ctx.createBufferSource();
+          source.buffer = buffer;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+          source.connect(gain).connect(ctx.destination);
+          source.start(now);
+        };
+
+        const highlightSegment = (id) => {
+          if (!id) {
+            return;
+          }
+          const element = document.getElementById(id);
+          if (element) {
+            element.classList.add("glow");
+          }
+        };
+
+        const unhighlightSegment = (id) => {
+          if (!id) {
+            return;
+          }
+          const element = document.getElementById(id);
+          if (element) {
+            element.classList.remove("glow");
+          }
+        };
+
+        const updateProgress = () => {
+          const value = assembledSteps.size;
+          progressLabel.textContent = `Assembled ${value} / ${totalSteps} steps`;
+          const percent = (value / totalSteps) * 100;
+          progressFill.style.width = `${percent}%`;
+        };
+
+        const openModal = (title, fragment) => {
+          modalTitle.textContent = title;
+          modalBody.innerHTML = "";
+          if (fragment instanceof DocumentFragment) {
+            modalBody.appendChild(fragment);
+          } else if (fragment) {
+            modalBody.appendChild(fragment);
+          }
+          modal.classList.add("modal--active");
+          modal.setAttribute("aria-hidden", "false");
+          modalClose.focus({ preventScroll: true });
+        };
+
+        const closeModal = () => {
+          modal.classList.remove("modal--active");
+          modal.setAttribute("aria-hidden", "true");
+        };
+
+        modal.addEventListener("click", (event) => {
+          if (
+            event.target === modal ||
+            event.target.classList.contains("modal__close")
+          ) {
+            closeModal();
+          }
+        });
+
+        window.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && modal.classList.contains("modal--active")) {
+            closeModal();
+          }
+        });
+
+        callouts.forEach((callout) => {
+          const targetId = callout.dataset.target;
+          const button = callout.querySelector(".callout-number");
+          const template = callout.querySelector("template.diary-detail");
+
+          const handleEnter = () => {
+            highlightSegment(targetId);
+            callout.classList.add("active");
+            playHoverSound();
+          };
+
+          const handleLeave = () => {
+            callout.classList.remove("active");
+            if (!assembledSteps.has(targetId)) {
+              unhighlightSegment(targetId);
+            }
+          };
+
+          callout.addEventListener("mouseenter", handleEnter);
+          callout.addEventListener("mouseleave", handleLeave);
+          button.addEventListener("focus", handleEnter);
+          button.addEventListener("blur", handleLeave);
+
+          button.addEventListener("click", async (event) => {
+            event.preventDefault();
+            await ensureAudio();
+            assembledSteps.add(targetId);
+            updateProgress();
+            button.setAttribute("aria-expanded", "true");
+            callout.classList.add("completed");
+            highlightSegment(targetId);
+            const fragment = template
+              ? template.content.cloneNode(true)
+              : document.createDocumentFragment();
+            openModal(callout.dataset.title || "Diary Entry", fragment);
+          });
+        });
+
+        partsButton.addEventListener("click", async () => {
+          await ensureAudio();
+          const template = document.getElementById("parts-list-template");
+          const fragment = template
+            ? template.content.cloneNode(true)
+            : document.createDocumentFragment();
+          openModal("Parts Inventory", fragment);
+        });
+
+        if (!reduceMotion && stage && diagram) {
+          stage.addEventListener("pointermove", (event) => {
+            const rect = stage.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            const rotateY = x * 12;
+            const rotateX = -y * 12;
+            const depth = 1 - Math.min(1, Math.hypot(x, y) * 1.4);
+            diagram.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            diagram.style.opacity = (0.8 + depth * 0.2).toFixed(3);
+          });
+
+          stage.addEventListener("pointerleave", () => {
+            diagram.style.transform = "rotateX(0deg) rotateY(0deg)";
+            diagram.style.opacity = "1";
+          });
+        }
+
+        updateProgress();
+      })();
+    </script>
+  </body>
+</html>

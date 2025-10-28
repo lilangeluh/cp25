@@ -422,14 +422,14 @@
       "sleep","the plant","the light under the door","a locked tab","the stairwell",
       "the streetlight","the cursor","the mirror","the storm drain","a thermos of broth",
       "the vending machine light","the rooftop garden air","a bag of oranges","the leftover dumpling",
-      "the fog on the windows","the recipe card","the umbrella you forgot"
+      "the fog on the windows","the recipe card","the umbrella you forgot", "the cheese"
     ],
     verb: [
       "returns","unfolds","waits","forgets you","remembers you","calls once","refuses",
       "opens slightly","glitches","hums","asks for patience","misplaces itself","turns left",
       "looks back","thins out","arrives unannounced","circles twice","echoes","stutters","flickers","doubles",
       "steams softly","collects questions","changes flavor","lingers","maps the storm","breathes again",
-      "condenses","waits by the door","checks the weather","warms its hands"
+      "condenses","waits by the door","checks the weather","warms its hands", "jumps", "trembles quietly"
     ],
     tail: [
       "with both shoes untied","like static","without sound","with pockets full of keys",
