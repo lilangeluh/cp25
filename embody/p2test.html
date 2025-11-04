@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Instructions for Feeling – Chair of Waiting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-assembly: #e5e7eb;
+      --bg-underneath: #fdf2ff;
+      --ink: #111827;
+      --muted: #6b7280;
+      --accent: #0f172a;
+      --accent-soft: #e56f8c;
+      --grid-line: rgba(148,163,184,0.22);
+      --transition: 220ms ease-in-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "SF Pro Text", "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #f9fafb 0, #e5e7eb 50%, #d1d5db 100%);
+      color: var(--ink);
+      transition: background var(--transition);
+    }
+
+    body.underneath-mode {
+      background:
+        radial-gradient(circle at top, #fdf2ff 0, #faf5ff 40%, #e0f2fe 100%);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 18px 40px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 14px 18px 8px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .title-block p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .mode-switch {
+      display: inline-flex;
+      gap: 10px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .mode-switch button {
+      border: none;
+      background: transparent;
+      padding: 4px 0;
+      cursor: pointer;
+      position: relative;
+      color: #6b7280;
+      transition: color 140ms ease-out;
+    }
+
+    .mode-switch button::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 160ms ease-out;
+    }
+
+    .mode-switch button.active {
+      color: var(--accent);
+    }
+    .mode-switch button.active::after {
+      width: 100%;
+    }
+
+    body.underneath-mode .mode-switch button.active {
+      color: var(--accent-soft);
+    }
+    body.underneath-mode .mode-switch button.active::after {
+      background: var(--accent-soft);
+    }
+
+    main {
+      flex: 1;
+      padding: 10px 40px 28px;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 8px 18px 20px;
+      }
+    }
+
+    .view {
+      display: none;
+      width: 100%;
+      height: calc(100vh - 90px);
+      max-height: 780px;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* -------------------- ASSEMBLY SHEET -------------------- */
+
+    #assemblyView {
+      position: relative;
+    }
+
+    .assembly-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+      gap: 20px;
+      height: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .assembly-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1.2fr) auto;
+      }
+    }
+
+    .assembly-figure {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top, #f9fafb 0, #e5e7eb 45%, #d1d5db 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .figure-inner {
+      width: 80%;
+      max-width: 520px;
+      aspect-ratio: 4 / 3;
+      border-radius: 28px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .figure-placeholder {
+      width: 86%;
+      height: 78%;
+      border-radius: 24px;
+      border: 1px dashed rgba(148,163,184,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    /* there is still a simple SVG so you have some sense of the chair
+       but you can replace this whole block with an <img> later */
+    .figure-line-drawing {
+      position: absolute;
+      inset: 18% 16%;
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    .figure-line-drawing svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .assembly-caption {
+      position: absolute;
+      left: 50px;
+      bottom: 26px;
+      font-size: 11px;
+      color: var(--muted);
+      max-width: 260px;
+    }
+
+    .assembly-caption span {
+      display: block;
+    }
+
+    .assembly-caption span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 10px;
+    }
+
+    .steps-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .steps-heading {
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .steps-title {
+      font-size: 20px;
+      margin: 0 0 4px;
+    }
+
+    .steps-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 20px;
+    }
+
+    .steps-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .step {
+      opacity: 0.15;
+      transition: opacity var(--transition), transform 160ms ease-out;
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      column-gap: 12px;
+      row-gap: 4px;
+      align-items: flex-start;
+    }
+
+    .step.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step-index {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3af;
+    }
+
+    .step-body {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .step-drawing {
+      grid-column: 2 / -1;
+      border-radius: 20px;
+      border: 1px dashed rgba(148,163,184,0.8);
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .steps-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .steps-controls button {
+      border: none;
+      background: transparent;
+      padding: 6px 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      cursor: pointer;
+      color: #4b5563;
+      border-bottom: 1px solid transparent;
+      transition: color 140ms ease-out, border-color 140ms ease-out;
+    }
+
+    .steps-controls button:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .steps-controls button:not(:disabled):hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .steps-progress {
+      font-size: 11px;
+    }
+
+    /* -------------------- UNDERNEATH VIEW -------------------- */
+
+    #underneathView {
+      position: relative;
+    }
+
+    .underneath-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 22px 22px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .underneath-layout {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 22px 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .underneath-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1.1fr) auto;
+        padding: 18px 18px;
+      }
+    }
+
+    .pixel-field {
+      position: relative;
+    }
+
+    .pixel-cluster {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      cursor: pointer;
+      transition: transform 140ms ease-out;
+    }
+
+    .pixel-cluster:hover {
+      transform: translateY(-3px);
+    }
+
+    /* place clusters in different spots for composition */
+    .cluster-0 { top: 18%; left: 8%; }
+    .cluster-1 { top: 55%; left: 22%; }
+    .cluster-2 { top: 30%; left: 55%; }
+    .cluster-3 { top: 62%; left: 70%; }
+
+    @media (max-width: 900px) {
+      .cluster-0 { top: 14%; left: 8%; }
+      .cluster-1 { top: 54%; left: 8%; }
+      .cluster-2 { top: 18%; left: 55%; }
+      .cluster-3 { top: 58%; left: 55%; }
+    }
+
+    .pixel-art {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 100px;
+      height: 100px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 3px;
+    }
+
+    .pixel-dot {
+      border-radius: 999px;
+      background: transparent;
+      transition: background 200ms ease-out, transform 200ms ease-out;
+      transform: scale(0.9);
+    }
+
+    .cluster-0 .pixel-dot.on { background: #111827; }
+    .cluster-1 .pixel-dot.on { background: #2563eb; }
+    .cluster-2 .pixel-dot.on { background: #7c3aed; }
+    .cluster-3 .pixel-dot.on { background: #f97316; }
+
+    .pixel-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(250, 250, 250, 0.9);
+      transition: opacity 260ms ease-out;
+    }
+
+    .pixel-cluster:hover .pixel-overlay,
+    .pixel-cluster.revealed .pixel-overlay {
+      opacity: 0;
+    }
+
+    .pixel-cluster:hover .pixel-dot.on,
+    .pixel-cluster.revealed .pixel-dot.on {
+      transform: scale(1);
+    }
+
+    .pixel-label {
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+
+    .under-text {
+      align-self: flex-end;
+      max-width: 520px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 28px;
+      padding: 18px 20px 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 900px) {
+      .under-text {
+        max-width: none;
+      }
+    }
+
+    .under-text h2 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #6b7280;
+    }
+
+    .under-main {
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 90px;
+    }
+
+    .under-main span.step-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .under-main em {
+      font-style: normal;
+      color: #be123c;
+    }
+
+    .under-foot {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .under-foot span.tag {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body class="assembly-mode">
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <h1>project 2 - embodiment</h1>
+        <p>Chair of Waiting · one object, two ways of building</p>
+      </div>
+      <div class="mode-switch">
+        <button id="assemblyBtn" class="active">Assembly sheet</button>
+        <button id="underneathBtn">Underneath</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- ASSEMBLY SHEET VIEW -->
+      <section id="assemblyView" class="view active">
+        <div class="assembly-layout">
+          <!-- big furniture area -->
+          <div class="assembly-figure">
+            <div class="figure-inner">
+              <div class="figure-placeholder">
+                drawing or photo of final furniture
+              </div>
+              <div class="figure-line-drawing">
+                <!-- simple chair outline (delete after insert image) -->
+                <!-- <svg viewBox="0 0 320 220">
+                  <g stroke="#9ca3af" stroke-width="3" fill="none" stroke-linecap="round">
+                    <line x1="80" y1="150" x2="80" y2="210" />
+                    <line x1="130" y1="150" x2="130" y2="210" />
+                    <line x1="195" y1="150" x2="195" y2="210" />
+                    <line x1="245" y1="150" x2="245" y2="210" />
+                    <rect x="70" y="135" width="190" height="20" rx="6"/>
+                    <rect x="80" y="70" width="40" height="70" rx="6"/>
+                    <rect x="195" y="70" width="40" height="70" rx="6"/>
+                    <line x1="90" y1="70" x2="225" y2="70"/>
+                  </g>
+                </svg> -->
+              </div>
+            </div>
+            <div class="assembly-caption">
+              <span class="label">model</span>
+              <span>Chair of Waiting · CW-04</span>
+              <!-- <span>Each step will appear on the right as you move through the build.</span> -->
+            </div>
+          </div>
+
+          <!-- steps -->
+          <div class="steps-column">
+            <div>
+              <div class="steps-heading">outer instructions</div>
+              <h2 class="steps-title">Assembly sheet</h2>
+              <!-- <p class="steps-subtitle">
+                One chair, four small moves. Click “next” to reveal each step and its drawing space.
+              </p> -->
+            </div>
+
+            <ol class="steps-list" id="stepsList">
+              <li class="step" data-step="0">
+                <div class="step-index">step 01</div>
+                <div class="step-body">
+                  Attach the four legs to the underside of the base panel. All feet should point in the same direction.
+                </div>
+                <div class="step-drawing">
+                  drawing for step 01 (legs)
+                </div>
+              </li>
+              <li class="step" data-step="1">
+                <div class="step-index">step 02</div>
+                <div class="step-body">
+                  Place the seat panel across the legs and fasten it with the long screws, working diagonally so the load spreads evenly.
+                </div>
+                <div class="step-drawing">
+                  drawing for step 02 (seat)
+                </div>
+              </li>
+              <li class="step" data-step="2">
+                <div class="step-index">step 03</div>
+                <div class="step-body">
+                  Slide the backrest pieces into their sockets on the seat. Press down until you feel them settle.
+                </div>
+                <div class="step-drawing">
+                  drawing for step 03 (backrest)
+                </div>
+              </li>
+              <li class="step" data-step="3">
+                <div class="step-index">step 04</div>
+                <div class="step-body">
+                  Walk around the chair and tighten every joint. Stop when the wood feels firm, not strained.
+                </div>
+                <div class="step-drawing">
+                  drawing for step 04 (final check)
+                </div>
+              </li>
+            </ol>
+
+            <div class="steps-controls">
+              <button id="prevStepBtn">previous step</button>
+              <span class="steps-progress" id="stepsProgress">step 1 of 4</span>
+              <button id="nextStepBtn">next step</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UNDERNEATH VIEW -->
+      <section id="underneathView" class="view">
+        <div class="underneath-grid"></div>
+
+        <div class="underneath-layout">
+          <!-- pixel clusters field -->
+          <div class="pixel-field">
+            <!-- cluster 0: legs -->
+            <div class="pixel-cluster cluster-0" data-step="0">
+              <div class="pixel-art">
+                <!-- row 1 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 2 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 3 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 4 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 5 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 6 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+              </div>
+              <div class="pixel-overlay"></div>
+              <div class="pixel-label">legs</div>
+            </div>
+
+            <!-- cluster 1: seat -->
+            <div class="pixel-cluster cluster-1" data-step="1">
+              <div class="pixel-art">
+                <!-- row 1 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 2 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 3 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 4 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 5 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 6 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+              </div>
+              <div class="pixel-overlay"></div>
+              <div class="pixel-label">seat</div>
+            </div>
+
+            <!-- cluster 2: back -->
+            <div class="pixel-cluster cluster-2" data-step="2">
+              <div class="pixel-art">
+                <!-- row 1 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 2 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 3 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 4 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 5 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 6 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+              </div>
+              <div class="pixel-overlay"></div>
+              <div class="pixel-label">back</div>
+            </div>
+
+            <!-- cluster 3: screws -->
+            <div class="pixel-cluster cluster-3" data-step="3">
+              <div class="pixel-art">
+                <!-- row 1 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 2 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 3 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div>
+                <!-- row 4 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+                <!-- row 5 -->
+                <div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div>
+                <!-- row 6 -->
+                <div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot on"></div><div class="pixel-dot"></div><div class="pixel-dot"></div><div class="pixel-dot"></div>
+              </div>
+              <div class="pixel-overlay"></div>
+              <div class="pixel-label">tighten</div>
+            </div>
+          </div>
+
+          <!-- emotional text -->
+          <div class="under-text">
+            <h2>underneath</h2>
+            <div class="under-main" id="underText">
+              <span class="step-label">hover a cluster</span>
+              Each small field on the left hides a piece of the same chair, broken down into dots.
+              As you move through them, imagine you are assembling the weight it will hold, not just the wood.
+            </div>
+            <div class="under-foot">
+              <span class="tag">chair of waiting</span>
+              <!-- <span>outer and inner instructions for the same object.</span> -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // -------- mode switching --------
+    const bodyEl = document.body;
+    const assemblyBtn = document.getElementById("assemblyBtn");
+    const underneathBtn = document.getElementById("underneathBtn");
+    const assemblyView = document.getElementById("assemblyView");
+    const underneathView = document.getElementById("underneathView");
+
+    function setView(view) {
+      if (view === "assembly") {
+        bodyEl.classList.remove("underneath-mode");
+        assemblyView.classList.add("active");
+        underneathView.classList.remove("active");
+        assemblyBtn.classList.add("active");
+        underneathBtn.classList.remove("active");
+      } else {
+        bodyEl.classList.add("underneath-mode");
+        assemblyView.classList.remove("active");
+        underneathView.classList.add("active");
+        assemblyBtn.classList.remove("active");
+        underneathBtn.classList.add("active");
+      }
+    }
+
+    assemblyBtn.addEventListener("click", () => setView("assembly"));
+    underneathBtn.addEventListener("click", () => setView("underneath"));
+
+    // -------- assembly: reveal steps one by one --------
+    const steps = Array.from(document.querySelectorAll(".step"));
+    const prevBtn = document.getElementById("prevStepBtn");
+    const nextBtn = document.getElementById("nextStepBtn");
+    const progressLabel = document.getElementById("stepsProgress");
+    let currentStepIndex = 0;
+
+    function updateSteps() {
+      steps.forEach((step, idx) => {
+        step.classList.toggle("visible", idx <= currentStepIndex);
+      });
+
+      prevBtn.disabled = currentStepIndex === 0;
+      nextBtn.disabled = currentStepIndex === steps.length - 1;
+      progressLabel.textContent = `step ${currentStepIndex + 1} of ${steps.length}`;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        updateSteps();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentStepIndex < steps.length - 1) {
+        currentStepIndex++;
+        updateSteps();
+      }
+    });
+
+    // allow clicking a step to jump to it
+    steps.forEach((step, idx) => {
+      step.addEventListener("click", () => {
+        currentStepIndex = idx;
+        updateSteps();
+      });
+    });
+
+    updateSteps(); // initial
+
+    // -------- underneath: emotional text on hover --------
+    const feelingTexts = [
+      {
+        label: "step 01 · legs",
+        text:
+          "You start with the legs. Four straight lines meeting the floor first, \
+pretending they exist only for weight and not for waiting."
+      },
+      {
+        label: "step 02 · seat",
+        text:
+          "Then the seat: a small flat country where someone might finally stop pacing. \
+You fix it in place and hope it will be kind to whoever arrives."
+      },
+      {
+        label: "step 03 · back",
+        text:
+          "You raise the backrest and suddenly there is a place to lean. \
+Support appears as a curve that says: stay for a while."
+      },
+      {
+        label: "step 04 · tighten",
+        text:
+          "Last, you walk in circles, tightening what already holds. \
+You are really fastening a promise: if anything gives way, it will not be you first."
+      }
+    ];
+
+    const clusters = document.querySelectorAll(".pixel-cluster");
+    const underText = document.getElementById("underText");
+
+    clusters.forEach(cluster => {
+      cluster.addEventListener("mouseenter", () => {
+        const i = Number(cluster.dataset.step);
+        const data = feelingTexts[i];
+        cluster.classList.add("revealed");
+        underText.innerHTML = `
+          <span class="step-label">${data.label}</span>
+          ${data.text}
+        `;
+      });
+    });
+  </script>
+</body>
+</html>
