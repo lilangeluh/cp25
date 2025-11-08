@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waiting Catalog · Instructions for Feeling</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Handjet:wght@400;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="catalog.css" />
+  </head>
+  <body data-scroll-container>
+    <div class="loader" aria-live="polite">
+      <div class="loader__frame">
+        <div class="loader__label">aligning the waiting grid</div>
+        <div class="loader__bar"><span class="loader__progress"></span></div>
+        <div class="loader__phrases"></div>
+      </div>
+    </div>
+
+    <div class="cursor" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 1 L21 12 L12 14 L10 23 Z" />
+      </svg>
+    </div>
+
+    <main class="catalog" data-scroll-section>
+      <header class="catalog-header">
+        <h1>Waiting Catalog</h1>
+        <div class="catalog-meta">
+          <span>Instructions for Feeling — Vol. 02</span>
+          <span>Specimens: nine chairs for patient moments</span>
+        </div>
+      </header>
+      <div class="catalog-divider"></div>
+      <section class="catalog-grid" id="catalogGrid">
+        <!-- tiles injected via JS -->
+      </section>
+      <footer class="catalog-footer">
+        <span>Waiting is an assembly</span>
+        <span>Design Museum Annex Archives</span>
+      </footer>
+    </main>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+    <script defer src="catalog.js"></script>
+  </body>
+</html>
