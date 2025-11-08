@@ -90,7 +90,7 @@ const loaderPhrases = document.querySelector(".loader__phrases");
 const loaderLabel = document.querySelector(".loader__label");
 const cursorEl = document.querySelector(".cursor");
 const gridEl = document.getElementById("catalogGrid");
-const HOLD_KEYS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const HOLD_KEYS = "ABCDEFGHJKLMNPQRSTUVWXYZ2356789";
 
 let scrollInstance;
 

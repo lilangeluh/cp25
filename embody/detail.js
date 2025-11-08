@@ -5,7 +5,7 @@ const CHAIRS = [
     name: "Airport Chair",
     caption: "Gate-side seat for terminals where departures blur into delays.",
     color: "#d0def4",
-    model: "models/chair-01.glb",
+    model: "models/airport.glb",
     ambientSound: "audio/airport.mp3",
     materials: ["Anodized steel legs", "Powder coat finish", "Delayed-departure cushion"],
     manufacturing: "Metropolitan Transit Fabrications",
