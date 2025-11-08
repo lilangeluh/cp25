@@ -13,7 +13,7 @@ const CHAIRS = [
     name: "Park Bench",
     caption: "Modular seating for terminals illuminated by fluorescent patience.",
     color: "#f4d0d5",
-    image: "",
+    image: "images/park.png",
   },
   {
     id: "chair-03",
@@ -21,7 +21,7 @@ const CHAIRS = [
     name: "Bus Stop Bench",
     caption: "Single perch for lobbies where names are called alphabetically late.",
     color: "#e8f1d8",
-    image: "",
+    image: "images/busstop.png",
   },
   {
     id: "chair-04",

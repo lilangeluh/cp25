@@ -44,6 +44,8 @@ const CHAIRS = [
     name: "Park Bench",
     caption: "Weathered bench for public greens where afternoons stretch thin.",
     color: "#f4d0d5",
+    model: "models/parkbench.glb",
+
     ambientSound: "audio/ambient-terminal.mp3",
     materials: ["Cedar slats", "Cast-iron arms", "Rain-softened bolts"],
     manufacturing: "Civic Seating Labs",
@@ -82,6 +84,8 @@ const CHAIRS = [
     name: "Bus Stop Bench",
     caption: "Shelter perch for routes where rain arrives before the bus.",
     color: "#e8f1d8",
+    model: "models/busstop.glb",
+
     ambientSound: "audio/ambient-lobby.mp3",
     materials: ["Perforated steel seat", "Route plaques", "Transit-grade bolts"],
     manufacturing: "Orderly Works, Ltd.",
