@@ -81,9 +81,88 @@ const CHAIRS = [
   {
     id: "chair-03",
     serial: "WF-103",
+    name: "Restaurant Booth",
+    caption: "Soft booth for diners rehearsing confessions between courses.",
+    color: "#e8f1d8",
+    model: "models/restaurant.glb",
+    ambientSound: "audio/ambient-border.mp3",
+    materials: ["Vinyl upholstery", "Maple trim", "Steel cleats"],
+    manufacturing: "Borderline Fixtures",
+    waitTime: "Average dwell time: 25 minutes",
+    specs: [
+      { label: "Model", value: "Restaurant Booth" },
+      { label: "Year", value: "2001 — midnight service" },
+      { label: "Serial", value: "WF-104" },
+      { label: "Type", value: "Dining alcove seating" },
+      { label: "Dimensions", value: "Banquette wrap 120°" },
+      { label: "Weight", value: "Two entrees of unsaid things" },
+      { label: "Dwell", value: "25-minute appetizer pause" },
+    ],
+    steps: [
+      {
+        title: "Anchor the plinth to the tiled floor, tracing the booth outline.",
+        feeling: "I count the breaths between water refills the way hosts do.",
+      },
+      {
+        title: "Set the seat box and feed the wiring for the pendant light.",
+        feeling: "Every hidden cable pulls another conversation into place.",
+      },
+      {
+        title: "Staple the vinyl, smoothing each tuft until the curve forgives.",
+        feeling: "Soft contact keeps the booth from confessing my restlessness.",
+      },
+      {
+        title: "Slide the table in and check the sightline to the pass.",
+        feeling: "This booth remembers every plate that arrived late.",
+      },
+    ],
+  },
+  {
+    id: "chair-04",
+    serial: "WF-104",
+    name: "Clinic Chair",
+    caption: "Examination chair for rooms where results take their time.",
+    color: "#f3e4d4",
+    model: "models/hospital.glb",
+    ambientSound: "audio/ambient-foyer.mp3",
+    materials: ["Sanitized vinyl", "IV-pole bracket", "Powder-coated frame"],
+    manufacturing: "Vestibule Systems",
+    waitTime: "Average dwell time: 19 minutes",
+    specs: [
+      { label: "Model", value: "Clinic Chair" },
+      { label: "Year", value: "2016 — quiet diagnostics" },
+      { label: "Serial", value: "WF-106" },
+      { label: "Type", value: "Outpatient seating" },
+      { label: "Dimensions", value: "Seat height 19\" reassurance" },
+      { label: "Weight", value: "Two lab results heavy" },
+      { label: "Dwell", value: "19-minute vitals wait" },
+    ],
+    steps: [
+      {
+        title: "Position the frame on the sterile mat and trace the contour.",
+        feeling: "Doors stay half open; I note the colour of the pause.",
+      },
+      {
+        title: "Attach the backrest with alternating screws, pausing between turns.",
+        feeling: "I alternate between certainty and wonder in the same rhythm.",
+      },
+      {
+        title: "Clamp the IV bracket and test the swing of its quiet arc.",
+        feeling: "Prepared to wait alone or with others; both require care.",
+      },
+      {
+        title: "Label the seat with today’s clinic code, letting the ink dry evenly.",
+        feeling: "Some diagnoses need a prelude; this chair holds mine.",
+      },
+    ],
+  },
+  
+  {
+    id: "chair-05",
+    serial: "WF-105",
     name: "Bus Stop Bench",
     caption: "Shelter perch for routes where rain arrives before the bus.",
-    color: "#e8f1d8",
+    color: "#dcd6f4",
     model: "models/busstop.glb",
 
     ambientSound: "audio/ambient-lobby.mp3",
@@ -119,49 +198,11 @@ const CHAIRS = [
     ],
   },
   {
-    id: "chair-04",
-    serial: "WF-104",
-    name: "Restaurant Booth",
-    caption: "Soft booth for diners rehearsing confessions between courses.",
-    color: "#f5ec9a",
-    ambientSound: "audio/ambient-border.mp3",
-    materials: ["Vinyl upholstery", "Maple trim", "Steel cleats"],
-    manufacturing: "Borderline Fixtures",
-    waitTime: "Average dwell time: 25 minutes",
-    specs: [
-      { label: "Model", value: "Restaurant Booth" },
-      { label: "Year", value: "2001 — midnight service" },
-      { label: "Serial", value: "WF-104" },
-      { label: "Type", value: "Dining alcove seating" },
-      { label: "Dimensions", value: "Banquette wrap 120°" },
-      { label: "Weight", value: "Two entrees of unsaid things" },
-      { label: "Dwell", value: "25-minute appetizer pause" },
-    ],
-    steps: [
-      {
-        title: "Anchor the plinth to the tiled floor, tracing the booth outline.",
-        feeling: "I count the breaths between water refills the way hosts do.",
-      },
-      {
-        title: "Set the seat box and feed the wiring for the pendant light.",
-        feeling: "Every hidden cable pulls another conversation into place.",
-      },
-      {
-        title: "Staple the vinyl, smoothing each tuft until the curve forgives.",
-        feeling: "Soft contact keeps the booth from confessing my restlessness.",
-      },
-      {
-        title: "Slide the table in and check the sightline to the pass.",
-        feeling: "This booth remembers every plate that arrived late.",
-      },
-    ],
-  },
-  {
-    id: "chair-05",
-    serial: "WF-105",
+    id: "chair-06",
+    serial: "WF-106",
     name: "Theater Seat",
     caption: "Playhouse chair for intermissions that feel longer than acts.",
-    color: "#dcd6f4",
+    color: "#f5ec9a",
     ambientSound: "audio/ambient-atrium.mp3",
     materials: ["Velvet upholstery", "Powdered brass arms", "Program holder"],
     manufacturing: "Atrium Assembly Co.",
@@ -194,44 +235,9 @@ const CHAIRS = [
       },
     ],
   },
-  {
-    id: "chair-06",
-    serial: "WF-106",
-    name: "Clinic Chair",
-    caption: "Examination chair for rooms where results take their time.",
-    color: "#f3e4d4",
-    ambientSound: "audio/ambient-foyer.mp3",
-    materials: ["Sanitized vinyl", "IV-pole bracket", "Powder-coated frame"],
-    manufacturing: "Vestibule Systems",
-    waitTime: "Average dwell time: 19 minutes",
-    specs: [
-      { label: "Model", value: "Clinic Chair" },
-      { label: "Year", value: "2016 — quiet diagnostics" },
-      { label: "Serial", value: "WF-106" },
-      { label: "Type", value: "Outpatient seating" },
-      { label: "Dimensions", value: "Seat height 19\" reassurance" },
-      { label: "Weight", value: "Two lab results heavy" },
-      { label: "Dwell", value: "19-minute vitals wait" },
-    ],
-    steps: [
-      {
-        title: "Position the frame on the sterile mat and trace the contour.",
-        feeling: "Doors stay half open; I note the colour of the pause.",
-      },
-      {
-        title: "Attach the backrest with alternating screws, pausing between turns.",
-        feeling: "I alternate between certainty and wonder in the same rhythm.",
-      },
-      {
-        title: "Clamp the IV bracket and test the swing of its quiet arc.",
-        feeling: "Prepared to wait alone or with others; both require care.",
-      },
-      {
-        title: "Label the seat with today’s clinic code, letting the ink dry evenly.",
-        feeling: "Some diagnoses need a prelude; this chair holds mine.",
-      },
-    ],
-  },
+  
+  
+  
   {
     id: "chair-07",
     serial: "WF-107",

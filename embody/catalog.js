@@ -18,42 +18,46 @@ const CHAIRS = [
   {
     id: "chair-03",
     serial: "WF-103",
-    name: "Bus Stop Bench",
-    caption: "Single perch for lobbies where names are called alphabetically late.",
+    name: "Restaurant Booth",
+    caption: "Compact rest for passport queues looping in quiet coils.",
     color: "#e8f1d8",
-    image: "images/busstop.png",
+    image: "images/restaurant.png",
   },
   {
     id: "chair-04",
     serial: "WF-104",
-    name: "Restaurant Booth",
-    caption: "Compact rest for passport queues looping in quiet coils.",
-    color: "#f5ec9a",
-    image: "",
+    name: "Clinic Chair",
+    caption: "Stackable chair for foyers where the play begins late.",
+    color: "#f3e4d4",
+    image: "images/hospital.png",
   },
+  
   {
     id: "chair-05",
     serial: "WF-105",
-    name: "Theater Seat",
-    caption: "Reclined seat for waiting rooms with ceiling-height apologies.",
+    name: "Bus Stop Bench",
+    caption: "Single perch for lobbies where names are called alphabetically late.",
     color: "#dcd6f4",
-    image: "",
+    image: "images/busstop.png",
   },
   {
     id: "chair-06",
     serial: "WF-106",
-    name: "Clinic Chair",
-    caption: "Stackable chair for foyers where the play begins late.",
-    color: "#f3e4d4",
-    image: "",
+    name: "Theater Seat",
+    caption: "Reclined seat for waiting rooms with ceiling-height apologies.",
+    color: "#f5ec9a",
+    image: "images/theater.png",
   },
+  
+  
+  
   {
     id: "chair-07",
     serial: "WF-107",
     name: "Meditation Cushion",
     caption: "High stool for galleries where art and answers hang equally still.",
     color: "#cfe9da",
-    image: "",
+    image: "images/meditation.png",
   },
   {
     id: "chair-08",
@@ -61,7 +65,7 @@ const CHAIRS = [
     name: "Salon Chair",
     caption: "Outdoor chair for porches watching weather reports roll in.",
     color: "#dde5f4",
-    image: "",
+    image: "images/hairsalon.png",
   },
   {
     id: "chair-09",
@@ -69,19 +73,21 @@ const CHAIRS = [
     name: "Office Chair",
     caption: "Seat designed for overnight lobbies and softly humming machines.",
     color: "#f7e4e4",
-    image: "",
+    image: "images/office.png",
   },
 ];
 
 const LOADER_PHRASES = [
-  "clocking the interval…",
+  "rearranging idle thoughts…",
   "aligning little pauses…",
   "warming the bench surface…",
-  "polishing anticipation…",
+  "stacking spare chairs for later…",
+  "buffering anticipation…",
   "filing queue numbers…",
-  "tuning patience module…",
+  "balancing the weight of maybe…",
   "folding spare cushions…",
-  "measuring the hush…",
+  "rotating the empty seat…",
+  "uploading minor anxieties…",
 ];
 
 const loaderEl = document.querySelector(".loader");
