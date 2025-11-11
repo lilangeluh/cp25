@@ -218,7 +218,7 @@ const CHAIRS = [
         body:
           "Constructed from commercial-grade steel with a thermoplastic coating, the Courtyard Bench is designed for durability in shared outdoor spaces. Measuring six feet in length, it features a contoured perforated seat, rounded edges, and a stable, welded frame with a black powder-coated finish. Weather-resistant and low-maintenance, it’s suited for courtyards, entryways, and park walkways — places built for pause. Its surface resists fading and rust, allowing it to endure seasons of sunlight, rain, and use without visible fatigue.",
         feeling:
-          "The natural tendency of attention when left to itself is to wander to ever new things; and so soon as the interest of its object is over, so soon as nothing new is to be noticed there, it passes, in spite of our will, to something else. If we wish to keep it upon one and the same object, we must seek constantly to find out something new about the latter, especially if other powerful impressions are attracting us away.¹",
+          "The natural tendency of attention when left to itself is to wander to ever new things; and so soon as the interest of its object is over, so soon as nothing new is to be noticed there, it passes, in spite of our will, to something else. If we wish to keep it upon one and the same object, we must seek constantly to find out something new about the latter, especially if other powerful impressions are attracting us away.",
       },
       {
         title: "Commuter features",
