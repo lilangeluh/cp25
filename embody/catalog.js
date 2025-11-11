@@ -1,23 +1,23 @@
 const CHAIRS = [
   {
     id: "chair-01",
-    serial: "WF-101",
+    serial: "C11153",
     name: "Airport Chair",
-    caption: "Designed for platforms where departures pause longer than promised.",
+    caption: "Ergonomically optimized for uncertainty",
     color: "#d0def4",
     image: "images/airport.png",
   },
   {
     id: "chair-02",
-    serial: "WF-102",
+    serial: "H-6570C",
     name: "Park Bench",
-    caption: "Modular seating for terminals illuminated by fluorescent patience.",
+    caption: "Collects conversations and falling leaves",
     color: "#f4d0d5",
     image: "images/park.png",
   },
   {
     id: "chair-03",
-    serial: "WF-103",
+    serial: "BC765",
     name: "Restaurant Booth",
     caption: "Compact rest for passport queues looping in quiet coils.",
     color: "#e8f1d8",
@@ -25,8 +25,8 @@ const CHAIRS = [
   },
   {
     id: "chair-04",
-    serial: "WF-104",
-    name: "Clinic Chair",
+    serial: "C-50B",
+    name: "Hospital Chair",
     caption: "Stackable chair for foyers where the play begins late.",
     color: "#f3e4d4",
     image: "images/hospital.png",
@@ -34,7 +34,7 @@ const CHAIRS = [
   
   {
     id: "chair-05",
-    serial: "WF-105",
+    serial: "H-3019",
     name: "Bus Stop Bench",
     caption: "Single perch for lobbies where names are called alphabetically late.",
     color: "#dcd6f4",
@@ -42,8 +42,8 @@ const CHAIRS = [
   },
   {
     id: "chair-06",
-    serial: "WF-106",
-    name: "Theater Seat",
+    serial: "88-626EN-08FA05-SR#",
+    name: "Movie Theater Seat",
     caption: "Reclined seat for waiting rooms with ceiling-height apologies.",
     color: "#f5ec9a",
     image: "images/theater.png",
@@ -53,7 +53,7 @@ const CHAIRS = [
   
   {
     id: "chair-07",
-    serial: "WF-107",
+    serial: "ZZSET14",
     name: "Meditation Cushion",
     caption: "High stool for galleries where art and answers hang equally still.",
     color: "#cfe9da",
@@ -61,7 +61,7 @@ const CHAIRS = [
   },
   {
     id: "chair-08",
-    serial: "WF-108",
+    serial: "RP6973",
     name: "Salon Chair",
     caption: "Outdoor chair for porches watching weather reports roll in.",
     color: "#dde5f4",
@@ -69,7 +69,7 @@ const CHAIRS = [
   },
   {
     id: "chair-09",
-    serial: "WF-109",
+    serial: "B315-GY",
     name: "Office Chair",
     caption: "Seat designed for overnight lobbies and softly humming machines.",
     color: "#f7e4e4",
@@ -138,7 +138,7 @@ function showLoader(callback, mode = "normal") {
     stopCycle = startPhraseCycle();
     const duration = randomBetween(1600, 2600);
     const start = performance.now();
-    const labelText = "Aligning the waiting grid";
+    const labelText = "Arranging the chairs";
     loaderLabel.textContent = labelText;
     function step(now) {
       const progress = Math.min((now - start) / duration, 1);

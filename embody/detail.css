@@ -76,7 +76,6 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.28rem;
   font-family: var(--heading-font);
-  box-shadow: 28px 32px 0 rgba(11, 31, 27, 0.06);
 }
 
 .loader__bar {
@@ -219,6 +218,18 @@ body::before {
   transition: transform 0.3s ease, opacity 0.3s ease;
   opacity: 1;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--heading-font);
+  letter-spacing: 0.4rem;
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: transparent;
+}
+
+.specimen-placeholder--soon {
+  color: var(--ink);
 }
 
 .specimen-stage model-viewer {
@@ -331,6 +342,10 @@ body::before {
   padding-left: clamp(12px, 2vw, 20px);
 }
 
+.detail-instructions--noheading h2 {
+  display: none;
+}
+
 .manual-steps {
   margin: 0;
   padding: 0;
@@ -384,6 +399,47 @@ body::before {
   font-style: italic;
 }
 
+.manual-step--paragraph .manual-step__label,
+.manual-step--highlights .manual-step__label {
+  font-style: normal;
+  letter-spacing: 0.16rem;
+}
+
+.manual-step__body {
+  margin: clamp(16px, 3vw, 26px) 0 0;
+  font-family: var(--body-font);
+  letter-spacing: 0.04rem;
+  font-size: clamp(0.96rem, 1.25vw, 1.08rem);
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.manual-step--paragraph .manual-step__body {
+  font-size: clamp(0.92rem, 1.1vw, 1rem);
+  line-height: 1.75;
+}
+
+.manual-step__list {
+  margin: clamp(16px, 3vw, 26px) 0 0;
+  padding-left: 22px;
+  font-family: var(--body-font);
+  letter-spacing: 0.04rem;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.manual-step__list li + li {
+  margin-top: 6px;
+}
+
+.manual-step--highlights .manual-step__list {
+  list-style: square;
+  font-size: clamp(0.92rem, 1.15vw, 1.02rem);
+  line-height: 1.6;
+  letter-spacing: 0.06rem;
+}
+
 .manual-step__text {
   margin: clamp(16px, 3vw, 28px) 0 0;
   font-family: var(--body-font);
@@ -395,15 +451,17 @@ body::before {
 .manual-step__overlay {
   position: absolute;
   inset: clamp(32px, 5.5vw, 46px);
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: clamp(20px, 4vw, 32px);
   pointer-events: none;
   opacity: 0;
   transform: scale(0.9);
   transition: opacity 0.35s ease, transform 0.35s ease;
   background: var(--step-accent, rgba(11, 31, 27, 1));
   border-radius: 4px;
-  box-shadow: 0 20px 50px rgba(11, 31, 27, 0.15);
+  box-shadow: none;
 }
 
 .manual-step__overlay::before {
@@ -412,14 +470,17 @@ body::before {
 
 .manual-step__overlay-text {
   position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
   font-family: var(--accent-font);
   font-size: clamp(0.95rem, 1.2vw, 1.05rem);
   letter-spacing: 0.18rem;
   line-height: 1.55;
-  color: var(--paper);
-  text-align: center;
+  color: var(--ink);
+  text-align: left;
   white-space: pre-wrap;
-  padding: 0 clamp(28px, 5vw, 42px);
+  padding: 0;
   word-break: break-word;
 }
 
@@ -430,8 +491,8 @@ body::before {
 
 .manual-step__tip {
   position: absolute;
-  top: clamp(8px, 1.5vw, 16px);
-  right: clamp(12px, 3vw, 24px);
+  top: clamp(10px, 2vw, 18px);
+  right: clamp(18px, 3vw, 28px);
   font-family: var(--accent-font);
   font-size: 0.8rem;
   letter-spacing: 0.22rem;
@@ -454,15 +515,24 @@ body::before {
 .detail-footer {
   border-top: 1px solid var(--grid-line);
   padding: clamp(28px, 6vw, 60px) clamp(32px, 8vw, 96px);
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.detail-footer__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   font-family: var(--accent-font);
   letter-spacing: 0.18rem;
   text-transform: uppercase;
-  font-size: 0.92rem;
+  font-size: clamp(0.82rem, 1vw, 0.95rem);
   color: var(--ink-soft);
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
+}
+
+.footer-line {
+  display: block;
 }
 
 @media (max-width: 960px) {
