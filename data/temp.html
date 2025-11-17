@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Temperatures My Body Remembers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="temp.css" />
+</head>
+<body>
+
+  <!-- Landing -->
+  <section id="landing" class="min-h-screen center landing">
+    <div>
+      <h1>Temperatures My Body Remembers</h1>
+      <p class="subtitle">A climate autobiography in 40 degrees</p>
+      <button id="enter-btn" class="enter-btn">
+        <span>Enter</span>
+        <span class="chevron">⌄</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Scroll experience -->
+  <section id="scroll-view" class="hidden">
+    <div class="scroll-header">
+      <div class="scroll-header-inner">
+        <div class="temp-display">
+          <div class="thermometer"></div>
+          <span id="current-temp-display">0°F</span>
+        </div>
+        <button id="archive-open-btn" class="archive-btn">
+          <div class="grid-icon">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
+          <span>Archive</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="scroll-container" class="scroll-container">
+      <div id="scroll-inner" class="scroll-inner">
+        <!-- memory sections will be injected here -->
+      </div>
+    </div>
+
+    <button id="about-open-btn" class="about-btn">
+      <div class="info-dot">i</div>
+    </button>
+  </section>
+
+  <!-- Memory Detail Overlay -->
+  <div id="memory-detail-overlay" class="overlay hidden">
+    <button class="overlay-close" id="detail-close-btn">×</button>
+    <div id="memory-detail-bg" class="detail-bg">
+      <div class="overlay-inner">
+        <!-- Polaroids -->
+        <div id="polaroid-container"></div>
+
+        <div class="detail-grid">
+          <div id="detail-left">
+            <div id="detail-temp" class="detail-temp">0°F</div>
+            <div id="detail-location" class="detail-location"></div>
+            <div id="detail-time" class="detail-time"></div>
+            <div class="detail-bar-bg">
+              <div id="detail-bar-fill" class="detail-bar-fill"></div>
+            </div>
+          </div>
+          <div id="detail-right">
+            <div id="detail-text" class="detail-text"></div>
+            <div id="detail-meta" class="detail-meta"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archive Overlay -->
+  <div id="archive-overlay" class="overlay hidden">
+    <button class="overlay-close" id="archive-close-btn">×</button>
+    <div class="overlay-inner">
+      <div class="archive-title-row">
+        <h2 class="archive-title">Archive — All 40 Degrees</h2>
+      </div>
+      <div id="archive-grid" class="archive-grid">
+        <!-- archive cards injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- About Overlay -->
+  <div id="about-overlay" class="overlay hidden">
+    <button class="overlay-close" id="about-close-btn">×</button>
+    <div class="overlay-inner">
+      <h2 class="about-title">A Method for Remembering Weather</h2>
+      <div class="about-text">
+        <p>
+          This project began with a simple question: what if temperature wasn't just data,
+          but autobiography? What if the body kept its own climate record?
+        </p>
+        <p>
+          Each of these 40 memories corresponds to a specific temperature between 0°F and 100°F.
+          They span four cities—Shenzhen, San Diego, Los Angeles, and Providence—and trace
+          the arc of migration, education, and becoming.
+        </p>
+        <p>
+          The temperatures are real, pulled from official weather records (NOAA, JMA, local stations).
+          The memories are real too, though compressed and distilled. Together, they form a kind of
+          dual record: meteorological and emotional, quantified and felt.
+        </p>
+        <p>
+          Climate is often discussed in abstractions—degrees of warming, tipping points, futures.
+          But we experience it in our bodies first. In the numbness of fingers. In sweat on the back
+          of the neck. In the specific quality of light at 67°F on a spring evening in Los Angeles.
+        </p>
+        <p>
+          This is an attempt to honor that embodied knowledge. To say: I was here. I felt this.
+          The body remembers.
+        </p>
+      </div>
+      <div class="about-meta">
+        <p>Data sources: NOAA, Japan Meteorological Agency, local weather stations</p>
+        <p>Memory period: 2003–2025</p>
+        <p>Locations: Shenzhen, China · San Diego, CA · Los Angeles, CA · Providence, RI</p>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="temp.js"></script>
+</body>
+</html>
