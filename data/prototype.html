@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Temperature Prototype — Rough Styled Version</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ========== BASIC RESET & VARIABLES ========== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f7f5f0;
+      --fg: #222222;
+      --muted: #666666;
+      --accent: #dba15c;
+      --overlay-bg: rgba(0, 0, 0, 0.12);
+      --panel-bg: #ffffff;
+      --border: #dddddd;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: "Georgia", "Times New Roman", serif;
+      --font-mono: "Menlo", "Consolas", monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ========== LANDING ========== */
+
+    #landing {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      background: linear-gradient(180deg, #dde6f7 0%, #f7f0dd 100%);
+    }
+
+    .landing-inner {
+      max-width: 640px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    .landing-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 6vw, 3rem);
+      margin-bottom: 1rem;
+    }
+
+    .landing-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .landing-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      border: 1px solid #cccccc;
+      background: #ffffff;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .landing-button span.chevron {
+      font-size: 1.3rem;
+    }
+
+    /* ========== SCROLL VIEW ========== */
+
+    #scroll-view {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scroll-header {
+      flex-shrink: 0;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: rgba(247, 245, 240, 0.95);
+      border-bottom: 1px solid #e1dfd8;
+    }
+
+    .scroll-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+    }
+
+    .scroll-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .header-btn {
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #d0ccc0;
+      background: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .current-temp-display {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .scroll-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .memory-section {
+      min-height: 65vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-radius: 16px;
+      background: #fdfbf7;
+      border: 1px solid #e4dfd2;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .memory-section:hover {
+      background: #f9f5ec;
+      transform: translateY(-3px);
+    }
+
+    .memory-inner {
+      max-width: 480px;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .memory-temp {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+    }
+
+    .memory-location {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .memory-short {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .memory-time {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #999999;
+      font-family: var(--font-mono);
+    }
+
+    /* ========== OVERLAYS ========== */
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--overlay-bg);
+      z-index: 50;
+    }
+
+    .overlay-panel {
+      width: min(900px, 92vw);
+      max-height: 90vh;
+      background: var(--panel-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 1.5rem 1.5rem 1.75rem;
+      overflow: auto;
+      position: relative;
+    }
+
+    .overlay-close {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.75rem;
+      border: none;
+      background: transparent;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    /* Detail layout */
+    .detail-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 720px) {
+      .detail-grid {
+        grid-template-columns: 1fr 1.4fr;
+      }
+    }
+
+    .img-placeholder {
+      width: 100%;
+      height: 160px;
+      background: #d0d0d0;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .detail-temp {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .detail-location {
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-time {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    .detail-bar {
+      width: 100%;
+      height: 6px;
+      background: #eee8db;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+
+    .detail-bar-fill {
+      height: 100%;
+      width: 0;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    .detail-text {
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #333333;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid #eee8db;
+      padding-top: 0.75rem;
+    }
+
+    /* Archive grid */
+    .archive-title {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .archive-card {
+      position: relative;
+      padding-top: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid #e0d8c8;
+      background: #f3ebdd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .archive-card-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========= LANDING ========= -->
+  <section id="landing">
+    <div class="landing-inner">
+      <h1 class="landing-title">Temperature Prototype</h1>
+      <p class="landing-subtitle">
+        Rough styled version. Placeholder content only.  
+        Just testing the structure: landing → scroll → detail → archive.
+      </p>
+      <button id="enter-btn" class="landing-button">
+        <span>Enter</span>
+        <span class="chevron">⌄</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ========= SCROLL EXPERIENCE ========= -->
+  <section id="scroll-view" class="hidden">
+    <header class="scroll-header">
+      <div class="scroll-title">Temperature Scroll (placeholder)</div>
+      <div class="scroll-actions">
+        <div class="current-temp-display" id="current-temp-display">—</div>
+        <button id="archive-open-btn" class="header-btn">Archive</button>
+      </div>
+    </header>
+
+    <div id="scroll-container" class="scroll-container">
+      <div id="scroll-inner" class="scroll-inner">
+        <!-- memory sections injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========= DETAIL OVERLAY ========= -->
+  <div id="detail-overlay" class="overlay hidden">
+    <div class="overlay-panel">
+      <button class="overlay-close" id="detail-close-btn">×</button>
+      <div class="detail-grid">
+        <div>
+          <!-- Grey image placeholder -->
+          <div class="img-placeholder"></div>
+
+          <div class="detail-temp" id="detail-temp">00°F</div>
+          <div class="detail-location" id="detail-location">Memory name</div>
+          <div class="detail-time" id="detail-time">TIME</div>
+
+          <div class="detail-bar">
+            <div class="detail-bar-fill" id="detail-bar-fill"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="detail-text" id="detail-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel nibh nec sapien convallis placerat. Integer aliquam, lectus id sagittis fermentum, lectus ex tempus mi, nec aliquam risus turpis non ipsum.
+          </div>
+          <div class="detail-meta" id="detail-meta">
+            Placeholder metadata about this memory (location, date, temperature, etc.).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= ARCHIVE OVERLAY ========= -->
+  <div id="archive-overlay" class="overlay hidden">
+    <div class="overlay-panel">
+      <button class="overlay-close" id="archive-close-btn">×</button>
+      <h2 class="archive-title">Archive — Placeholder Temperatures</h2>
+      <div id="archive-grid" class="archive-grid">
+        <!-- archive cards injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======= SAMPLE PLACEHOLDER DATA =======
+    const memories = [
+      {
+        temp: 12,
+        name: "Memory 1",
+        short: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae fermentum elit. Donec eu porttitor augue. Cras quis hendrerit lorem. Sed eget viverra velit. Integer a varius massa, at commodo lorem.",
+        time: "morning"
+      },
+      {
+        temp: 27,
+        name: "Memory 2",
+        short: "Short placeholder text for this memory.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dignissim nibh eu lectus feugiat, nec scelerisque turpis elementum. Curabitur posuere, nunc at feugiat porttitor, nibh magna euismod velit.",
+        time: "afternoon"
+      },
+      {
+        temp: 41,
+        name: "Memory 3",
+        short: "Another example memory with lorem ipsum.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse luctus feugiat eros a sagittis. Vivamus quis purus sit amet massa consequat molestie vel non libero.",
+        time: "evening"
+      },
+      {
+        temp: 55,
+        name: "Memory 4",
+        short: "Placeholder description goes here.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquam dolor quis velit sollicitudin, vel sodales sem iaculis. Ut eget nisi viverra, pellentesque magna vel, iaculis risus.",
+        time: "night"
+      },
+      {
+        temp: 68,
+        name: "Memory 5",
+        short: "Filler text for testing the layout.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare tincidunt sem, quis interdum ipsum faucibus vitae. Nunc quam dui, facilisis eget lacus a, pulvinar scelerisque lorem.",
+        time: "midday"
+      },
+      {
+        temp: 82,
+        name: "Memory 6",
+        short: "More placeholder content for testing.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In hac habitasse platea dictumst. Maecenas interdum, lorem eu dapibus aliquam, risus orci laoreet lectus, eget dictum massa lorem nec sapien.",
+        time: "late night"
+      },
+      {
+        temp: 93,
+        name: "Memory 7",
+        short: "Short lorem line for this entry.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque egestas sed erat sed bibendum. Aenean porta rhoncus semper. Cras sit amet feugiat ante, sed sollicitudin elit.",
+        time: "afternoon"
+      },
+      {
+        temp: 100,
+        name: "Memory 8",
+        short: "Last memory placeholder for now.",
+        long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a enim eget erat maximus lacinia. Pellentesque in tristique justo. Suspendisse mattis nunc at nisl luctus iaculis.",
+        time: "midday"
+      }
+    ];
+
+    // ======= DOM REFERENCES =======
+    const landing = document.getElementById("landing");
+    const scrollView = document.getElementById("scroll-view");
+    const enterBtn = document.getElementById("enter-btn");
+
+    const scrollContainer = document.getElementById("scroll-container");
+    const scrollInner = document.getElementById("scroll-inner");
+    const currentTempDisplay = document.getElementById("current-temp-display");
+
+    const detailOverlay = document.getElementById("detail-overlay");
+    const detailCloseBtn = document.getElementById("detail-close-btn");
+    const detailTemp = document.getElementById("detail-temp");
+    const detailLocation = document.getElementById("detail-location");
+    const detailTime = document.getElementById("detail-time");
+    const detailBarFill = document.getElementById("detail-bar-fill");
+    const detailText = document.getElementById("detail-text");
+    const detailMeta = document.getElementById("detail-meta");
+
+    const archiveOverlay = document.getElementById("archive-overlay");
+    const archiveOpenBtn = document.getElementById("archive-open-btn");
+    const archiveCloseBtn = document.getElementById("archive-close-btn");
+    const archiveGrid = document.getElementById("archive-grid");
+
+    let currentMemory = null;
+
+    function formatTemp(temp) {
+      return temp + "°F";
+    }
+
+    // ======= RENDER MAIN SCROLL SECTIONS =======
+    function renderScrollSections() {
+      scrollInner.innerHTML = "";
+      memories.forEach((memory) => {
+        const section = document.createElement("div");
+        section.className = "memory-section";
+
+        const inner = document.createElement("div");
+        inner.className = "memory-inner";
+
+        const tempEl = document.createElement("div");
+        tempEl.className = "memory-temp";
+        tempEl.textContent = formatTemp(memory.temp);
+
+        const locEl = document.createElement("div");
+        locEl.className = "memory-location";
+        locEl.textContent = memory.name;
+
+        const shortEl = document.createElement("div");
+        shortEl.className = "memory-short";
+        shortEl.textContent = memory.short;
+
+        const timeEl = document.createElement("div");
+        timeEl.className = "memory-time";
+        timeEl.textContent = memory.time;
+
+        inner.appendChild(tempEl);
+        inner.appendChild(locEl);
+        inner.appendChild(shortEl);
+        inner.appendChild(timeEl);
+        section.appendChild(inner);
+
+        section.addEventListener("click", () => openDetail(memory));
+
+        scrollInner.appendChild(section);
+      });
+
+      if (memories[0]) {
+        currentTempDisplay.textContent = formatTemp(memories[0].temp);
+      }
+    }
+
+    // ======= UPDATE HEADER TEMP ON SCROLL =======
+    function handleScroll() {
+      const sections = Array.from(document.querySelectorAll(".memory-section"));
+      const containerRect = scrollContainer.getBoundingClientRect();
+
+      let closestSection = null;
+      let closestDistance = Infinity;
+
+      sections.forEach((sec, index) => {
+        const rect = sec.getBoundingClientRect();
+        const sectionCenter = rect.top + rect.height / 2;
+        const containerCenter = containerRect.top + containerRect.height / 2;
+        const dist = Math.abs(sectionCenter - containerCenter);
+        if (dist < closestDistance) {
+          closestDistance = dist;
+          closestSection = index;
+        }
+      });
+
+      if (closestSection != null && memories[closestSection]) {
+        currentTempDisplay.textContent = formatTemp(memories[closestSection].temp);
+      }
+    }
+
+    // ======= DETAIL VIEW =======
+    function openDetail(memory) {
+      currentMemory = memory;
+      detailTemp.textContent = formatTemp(memory.temp);
+      detailLocation.textContent = memory.name;
+      detailTime.textContent = memory.time;
+      detailText.textContent = memory.long;
+
+      detailBarFill.style.width = Math.max(10, Math.min(memory.temp, 100)) + "%";
+
+      detailMeta.textContent =
+        "Placeholder metadata for " + memory.name + " – temperature " + formatTemp(memory.temp) + ".";
+
+      detailOverlay.classList.remove("hidden");
+    }
+
+    function closeDetail() {
+      detailOverlay.classList.add("hidden");
+      currentMemory = null;
+    }
+
+    // ======= ARCHIVE VIEW =======
+    function renderArchive() {
+      archiveGrid.innerHTML = "";
+      memories.forEach((memory) => {
+        const card = document.createElement("div");
+        card.className = "archive-card";
+
+        const inner = document.createElement("div");
+        inner.className = "archive-card-inner";
+        inner.textContent = memory.temp + "°";
+
+        card.appendChild(inner);
+        card.addEventListener("click", () => {
+          archiveOverlay.classList.add("hidden");
+          openDetail(memory);
+        });
+
+        archiveGrid.appendChild(card);
+      });
+    }
+
+    function openArchive() {
+      renderArchive();
+      archiveOverlay.classList.remove("hidden");
+    }
+
+    function closeArchive() {
+      archiveOverlay.classList.add("hidden");
+    }
+
+    // ======= EVENT LISTENERS =======
+    enterBtn.addEventListener("click", () => {
+      landing.classList.add("hidden");
+      scrollView.classList.remove("hidden");
+      scrollContainer.scrollTop = 0;
+      renderScrollSections();
+    });
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+
+    detailCloseBtn.addEventListener("click", closeDetail);
+    detailOverlay.addEventListener("click", (e) => {
+      if (e.target === detailOverlay) closeDetail();
+    });
+
+    archiveOpenBtn.addEventListener("click", openArchive);
+    archiveCloseBtn.addEventListener("click", closeArchive);
+    archiveOverlay.addEventListener("click", (e) => {
+      if (e.target === archiveOverlay) closeArchive();
+    });
+
+    // Initial render (so archive works even before entering, if needed)
+    renderScrollSections();
+  </script>
+</body>
+</html>

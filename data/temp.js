@@ -42,7 +42,7 @@ const memories = [
     const enterBtn = document.getElementById('enter-btn');
     const scrollContainer = document.getElementById('scroll-container');
     const scrollInner = document.getElementById('scroll-inner');
-    const currentTempDisplay = document.getElementById('current-temp-display');
+    const tempToggleButtons = document.querySelectorAll('.temp-toggle__btn');
 
     const detailOverlay = document.getElementById('memory-detail-overlay');
     const detailCloseBtn = document.getElementById('detail-close-btn');
@@ -65,14 +65,129 @@ const memories = [
     const aboutCloseBtn = document.getElementById('about-close-btn');
 
     let currentMemory = null;
+    let currentUnit = 'fahrenheit';
 
     enterBtn.addEventListener('click', () => {
       landing.classList.add('hidden');
       scrollView.classList.remove('hidden');
     });
 
+    const gradientStart = '#cfdfee';
+    const gradientEnd = '#ffc45e';
+    const tempColorStart = '#142b4d';
+    const tempColorEnd = '#a13600';
+    const polaroidTiltLimit = 7;
+
+    function clamp01(value) {
+      return Math.max(0, Math.min(1, value));
+    }
+
+    function convertTemp(valueF, unit = currentUnit) {
+      return unit === 'fahrenheit' ? Math.round(valueF) : Math.round(((valueF - 32) * 5) / 9);
+    }
+
+    function getUnitSymbol(unit = currentUnit) {
+      return unit === 'fahrenheit' ? '°F' : '°C';
+    }
+
+    function formatTemp(valueF, includeUnit = true) {
+      const value = convertTemp(valueF);
+      const suffix = includeUnit ? getUnitSymbol() : '°';
+      return `${value}${suffix}`;
+    }
+
+    function updateTempElement(element) {
+      const attr = element.getAttribute('data-temp-f');
+      if (attr === null) return;
+      const valueF = parseFloat(attr);
+      if (Number.isNaN(valueF)) return;
+      const showUnit = element.getAttribute('data-temp-show-unit') !== 'false';
+      element.textContent = formatTemp(valueF, showUnit);
+    }
+
+    function setTempElement(element, valueF, options = {}) {
+      element.setAttribute('data-temp-f', valueF);
+      if (options.showUnit === false) {
+        element.setAttribute('data-temp-show-unit', 'false');
+      } else {
+        element.removeAttribute('data-temp-show-unit');
+      }
+      updateTempElement(element);
+    }
+
+    function hexToRgb(hex) {
+      let sanitized = hex.replace('#', '');
+      if (sanitized.length === 3) {
+        sanitized = sanitized.split('').map((char) => char + char).join('');
+      }
+      const num = parseInt(sanitized, 16);
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255,
+      };
+    }
+
+    function refreshAllTemps() {
+      document.querySelectorAll('[data-temp-f]').forEach(updateTempElement);
+      if (currentMemory) {
+        detailMeta.textContent = `Official Data: ${currentMemory.location}, ${currentMemory.time}, ${formatTemp(
+          currentMemory.temp
+        )}`;
+      }
+    }
+
+    tempToggleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selectedUnit = button.dataset.unit;
+        if (!selectedUnit || selectedUnit === currentUnit) return;
+        currentUnit = selectedUnit;
+        tempToggleButtons.forEach((btn) => btn.classList.toggle('is-active', btn === button));
+        refreshAllTemps();
+      });
+    });
+
+    function mixColorChannels(startHex, endHex, progress) {
+      const start = hexToRgb(startHex);
+      const end = hexToRgb(endHex);
+      const safeProgress = clamp01(progress);
+      const interpolate = (channel) => Math.round(start[channel] + (end[channel] - start[channel]) * safeProgress);
+      return { r: interpolate('r'), g: interpolate('g'), b: interpolate('b') };
+    }
+
+    function rgbToString({ r, g, b }) {
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function mixColors(startHex, endHex, progress) {
+      return rgbToString(mixColorChannels(startHex, endHex, progress));
+    }
+
+    function getTempColor(progress) {
+      return mixColors(tempColorStart, tempColorEnd, progress);
+    }
+
+    function getMemoryProgress(memory) {
+      const index = memories.indexOf(memory);
+      if (index === -1) return 0;
+      const maxIndex = Math.max(memories.length - 1, 1);
+      return index / maxIndex;
+    }
+
+    function updateScrollGradient(progress) {
+      if (!scrollContainer) return;
+      const clamped = clamp01(progress);
+      const bottomColor = mixColors(gradientStart, gradientEnd, clamped);
+      const midColor = mixColors(gradientStart, gradientEnd, Math.min(clamped + 0.2, 1));
+      scrollContainer.style.background = `linear-gradient(180deg, ${gradientStart} 0%, ${midColor} 60%, ${bottomColor} 100%)`;
+      const infoColor = mixColors('#1d283a', '#6a2a00', clamped);
+      document.documentElement.style.setProperty('--info-color', infoColor);
+    }
+
     function renderScrollSections() {
-      memories.forEach(memory => {
+      const maxIndex = Math.max(memories.length - 1, 1);
+      memories.forEach((memory, index) => {
+        const progress = index / maxIndex;
         const section = document.createElement('div');
         section.className = 'memory-section';
 
@@ -80,8 +195,8 @@ const memories = [
 
         const tempEl = document.createElement('div');
         tempEl.className = 'memory-temp';
-        tempEl.textContent = `${memory.temp}°F`;
-        tempEl.style.color = memory.color;
+        setTempElement(tempEl, memory.temp);
+        tempEl.style.color = getTempColor(progress);
 
         const locEl = document.createElement('h3');
         locEl.className = 'memory-location';
@@ -107,69 +222,54 @@ const memories = [
       });
     }
 
-    function updateScrollTemp() {
+    function handleScroll() {
       const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
       const progress = scrollTop / (scrollHeight - clientHeight || 1);
-      const temp = Math.round(progress * 100);
-      currentTempDisplay.textContent = `${temp}°F`;
+      updateScrollGradient(progress);
     }
 
-    scrollContainer.addEventListener('scroll', updateScrollTemp);
+    scrollContainer.addEventListener('scroll', handleScroll);
 
     function openDetail(memory) {
       currentMemory = memory;
+      const progress = getMemoryProgress(memory);
 
-      detailTemp.textContent = `${memory.temp}°F`;
+      setTempElement(detailTemp, memory.temp);
       detailLocation.textContent = memory.location;
       detailTime.textContent = memory.time;
+      detailTemp.style.color = getTempColor(progress);
       detailBarFill.style.width = `${memory.temp}%`;
       detailBarFill.style.background = memory.color;
       detailText.textContent = memory.long;
-      detailMeta.textContent = `Official Data: ${memory.location}, ${memory.time}, ${memory.temp}°F`;
+      detailMeta.textContent = `Official Data: ${memory.location}, ${memory.time}, ${formatTemp(memory.temp)}`;
 
-      detailBg.style.background = `linear-gradient(135deg, ${memory.color}22 0%, ${memory.color}44 100%)`;
+      const lightTone = mixColors(memory.color, '#ffffff', 0.18);
+      const shadowTone = mixColors(memory.color, '#000000', 0.15);
+      detailBg.style.background = `linear-gradient(135deg, ${lightTone} 0%, ${shadowTone} 100%)`;
 
       polaroidContainer.innerHTML = '';
+      const tilt = ((memory.temp * 13) % (polaroidTiltLimit * 2)) - polaroidTiltLimit;
 
-      const imageCount = (memory.temp % 3) === 0 ? 2 : 1;
-      const seed = memory.temp;
-      const rotations = [-8, -4, 3, 6, -6, 5];
-      const positions = [
-        { top: '15%', left: '5%' },
-        { top: '25%', right: '8%' },
-        { bottom: '20%', left: '10%' },
-        { bottom: '15%', right: '12%' },
-        { top: '40%', left: '15%' },
-        { top: '35%', right: '15%' }
-      ];
+      const polaroid = document.createElement('div');
+      polaroid.className = 'polaroid';
+      polaroid.style.transform = `rotate(${tilt}deg)`;
 
-      for (let i = 0; i < imageCount; i++) {
-        const posIndex = (seed + i * 7) % positions.length;
-        const rotIndex = (seed + i * 3) % rotations.length;
+      const inner = document.createElement('div');
+      inner.className = 'polaroid-inner';
 
-        const p = document.createElement('div');
-        p.className = 'polaroid';
-        const style = positions[posIndex];
-        for (const key in style) p.style[key] = style[key];
-        p.style.transform = `rotate(${rotations[rotIndex]}deg)`;
+      const img = document.createElement('div');
+      img.className = 'polaroid-img';
+      img.style.background = `linear-gradient(135deg, ${memory.color}44, ${memory.color}bb)`;
+      setTempElement(img, memory.temp, { showUnit: false });
 
-        const inner = document.createElement('div');
-        inner.className = 'polaroid-inner';
+      const caption = document.createElement('div');
+      caption.className = 'polaroid-caption';
+      caption.textContent = memory.location.split(',')[0];
 
-        const img = document.createElement('div');
-        img.className = 'polaroid-img';
-        img.style.background = `linear-gradient(135deg, ${memory.color}44, ${memory.color}88)`;
-        img.textContent = `${memory.temp}°`;
-
-        const caption = document.createElement('div');
-        caption.className = 'polaroid-caption';
-        caption.textContent = memory.location.split(',')[0];
-
-        inner.appendChild(img);
-        inner.appendChild(caption);
-        p.appendChild(inner);
-        polaroidContainer.appendChild(p);
-      }
+      inner.appendChild(img);
+      inner.appendChild(caption);
+      polaroid.appendChild(inner);
+      polaroidContainer.appendChild(polaroid);
 
       detailOverlay.classList.remove('hidden');
     }
@@ -187,7 +287,7 @@ const memories = [
 
         const temp = document.createElement('div');
         temp.className = 'archive-temp';
-        temp.textContent = `${memory.temp}°`;
+        setTempElement(temp, memory.temp, { showUnit: false });
 
         const hover = document.createElement('div');
         hover.className = 'archive-hover';
@@ -198,12 +298,7 @@ const memories = [
         const loc = document.createElement('div');
         loc.textContent = memory.location;
 
-        const short = document.createElement('div');
-        short.className = 'archive-hover-short';
-        short.textContent = memory.short;
-
         hoverText.appendChild(loc);
-        hoverText.appendChild(short);
         hover.appendChild(hoverText);
 
         card.appendChild(temp);
@@ -236,3 +331,5 @@ const memories = [
     });
 
     renderScrollSections();
+    refreshAllTemps();
+    updateScrollGradient(0);

@@ -30,9 +30,9 @@
   <section id="scroll-view" class="hidden">
     <div class="scroll-header">
       <div class="scroll-header-inner">
-        <div class="temp-display">
-          <div class="thermometer"></div>
-          <span id="current-temp-display">0°F</span>
+        <div class="temp-toggle" role="group" aria-label="Temperature units">
+          <button type="button" class="temp-toggle__btn is-active" data-unit="fahrenheit">°F</button>
+          <button type="button" class="temp-toggle__btn" data-unit="celsius">°C</button>
         </div>
         <button id="archive-open-btn" class="archive-btn">
           <div class="grid-icon">
@@ -58,13 +58,13 @@
 
   <!-- Memory Detail Overlay -->
   <div id="memory-detail-overlay" class="overlay hidden">
-    <button class="overlay-close" id="detail-close-btn">×</button>
     <div id="memory-detail-bg" class="detail-bg">
+      <button class="overlay-close" id="detail-close-btn">×</button>
       <div class="overlay-inner">
-        <!-- Polaroids -->
-        <div id="polaroid-container"></div>
-
         <div class="detail-grid">
+          <!-- Polaroid -->
+          <div id="polaroid-container" class="detail-polaroid"></div>
+
           <div id="detail-left">
             <div id="detail-temp" class="detail-temp">0°F</div>
             <div id="detail-location" class="detail-location"></div>
