@@ -825,8 +825,20 @@
       { temp: 45, location: "Memory 10 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. Aliquam sit amet viverra nisi. Ut consequat nulla eget facilisis luctus. Vestibulum laoreet eget risus eget elementum.", time: "afternoon",    color: "#E8EBE2" },
       { temp: 50, location: "Memory 11 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel dui sit amet lorem convallis dictum. Curabitur placerat, sem ac dictum consectetur, ligula dolor commodo nisl, vel vestibulum justo quam vitae nulla.", time: "evening",      color: "#E8E8DF" },
       { temp: 55, location: "Memory 12 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat volutpat. Phasellus sagittis nibh eget arcu sollicitudin eleifend. Suspendisse et libero vel mi malesuada hendrerit sed nec tortor.", time: "night",        color: "#E8E8DC" },
+      
       { temp: 60, location: "Memory 13 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vel turpis ut magna cursus luctus. Nunc ac aliquet tellus. Suspendisse cursus erat nec neque consequat, vitae dignissim sapien pellentesque.", time: "morning",       color: "#ECE8D9" },
-      { temp: 65, location: "Memory 14 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et dui sit amet mi fermentum semper. Integer sit amet luctus orci. Suspendisse porttitor imperdiet egestas.", time: "afternoon",    color: "#F0E8D6" },
+      {
+  temp: 66,
+  location: "Aoraki / Mount Cook, New Zealand",
+  short: "Lupins everywhere",
+  long: "December 24, 2024. I'm halfway up the Hooker Valley trail, the kind of steady incline that makes your legs warm but your fingers still a little cold. Lupins spill down the valley in impossible purples and pinks, like someone went crazy with a pastel highlighter pack. The air smells like wet stone and sunblock. There is a small glacial river runs parallel to the path, the water is a milky blue from melted glacier mixed with rocks. Officially it’s 66°F, but the wind off the snowfields keeps brushing past me.",
+  time: "Morning",
+  feelsLike: 60,
+  date: "2024-12-24",
+  color: "#FFE4BE",
+  image: "images/aoraki.jpg" 
+  
+},
       { temp: 70, location: "Memory 15 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in consequat turpis. Aliquam vel justo id ipsum viverra sodales. Donec gravida ante sit amet nisi dapibus, id rhoncus ligula porta.", time: "evening",      color: "#F4E8D3" },
       { temp: 75, location: "Memory 16 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero sit amet mauris tincidunt, vitae molestie urna dictum. Integer ac lorem at felis blandit pharetra.", time: "night",        color: "#F8E8D0" },
       { temp: 80, location: "Memory 17 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat risus vitae consequat hendrerit. Morbi rutrum cursus arcu, sit amet convallis ipsum volutpat nec. Aenean consequat nec lorem in gravida.", time: "midday",       color: "#FCE8CD" },
@@ -1057,8 +1069,13 @@
 
       const img = document.createElement('div');
       img.className = 'polaroid-img';
+
+      if (memory.image) {
+      img.style.background = `url('${memory.image}') center/cover no-repeat`;
+      } else {
       img.style.background = `linear-gradient(135deg, ${memory.color}44, ${memory.color}bb)`;
       setTempElement(img, memory.temp, { showUnit: false });
+      }
 
       const caption = document.createElement('div');
       caption.className = 'polaroid-caption';
