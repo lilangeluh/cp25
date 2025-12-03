@@ -45,6 +45,7 @@
       line-height: 1.55;
       letter-spacing: -0.01em;
       overflow: hidden;
+      transition: filter 0.6s ease, transform 0.6s ease;
     }
 
     img {
@@ -105,6 +106,8 @@
       max-width: 720px;
       margin: 0 auto;
       padding: clamp(2rem, 6vw, 5rem);
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -138,6 +141,7 @@
       gap: 0.75rem;
       transition: transform 0.25s ease, color 0.25s ease, border-color 0.25s ease;
       animation: float 3.5s ease-in-out infinite;
+      will-change: transform;
     }
 
     .enter-btn:hover {
@@ -159,6 +163,30 @@
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-14px); }
+    }
+
+    .landing.exit {
+      pointer-events: none;
+      animation: fadeOut 0.9s ease forwards;
+    }
+
+    .landing.exit .enter-btn {
+      animation: blurZoom 0.95s ease forwards;
+    }
+
+    body.entering {
+      filter: blur(8px);
+      transform: scale(1.01);
+    }
+
+    @keyframes blurZoom {
+      0% { transform: scale(1); opacity: 1; filter: blur(0px); }
+      60% { transform: scale(1.2); opacity: 0.6; filter: blur(6px); }
+      100% { transform: scale(1.35); opacity: 0; filter: blur(10px); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; }
     }
 
     /* Scroll view */
@@ -254,41 +282,45 @@
     .scroll-container {
       position: relative;
       height: 100vh;
-      overflow-y: auto;
-      padding-top: 4.8rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4.8rem 0 3rem;
       background: var(--blue-soft);
       transition: background 0.4s ease;
+      white-space: nowrap;
+      scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
     }
 
     .scroll-inner {
-      width: min(960px, 90vw);
-      margin: 0 auto;
-      padding: clamp(2rem, 6vw, 4rem) 0 clamp(5rem, 8vw, 7rem);
-      display: grid;
-      gap: clamp(4rem, 8vw, 10rem);
+      display: inline-flex;
+      gap: clamp(2rem, 4vw, 3rem);
+      padding: 0 clamp(2rem, 5vw, 4rem);
     }
 
     /* Memories */
 
     .memory-section {
-      min-height: 90vh;
+      position: relative;
+      min-height: 70vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: clamp(2.5rem, 7vw, 4rem) 0;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.4s ease;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      scroll-snap-align: center;
+      flex: 0 0 min(80vw, 720px);
     }
 
     .memory-section:hover {
-      transform: translateY(-12px);
+      transform: translateY(-6px);
     }
 
     .memory-section > div {
-      width: min(620px, 84vw);
-      padding: clamp(2rem, 5vw, 3.5rem);
+      width: 100%;
+      padding: clamp(2.2rem, 5vw, 3.8rem);
       border-radius: 40px;
       border: none;
       background: transparent;
@@ -836,7 +868,7 @@
   feelsLike: 60,
   date: "2024-12-24",
   color: "#FFE4BE",
-  image: "data/images/aoraki.JPG" 
+  image: "./images/aoraki.JPG" 
   
 },
       { temp: 70, location: "Memory 15 location", short: "Placeholder description.", long: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in consequat turpis. Aliquam vel justo id ipsum viverra sodales. Donec gravida ante sit amet nisi dapibus, id rhoncus ligula porta.", time: "evening",      color: "#F4E8D3" },
@@ -878,8 +910,13 @@
     let currentUnit = 'fahrenheit';
 
     enterBtn.addEventListener('click', () => {
-      landing.classList.add('hidden');
-      scrollView.classList.remove('hidden');
+      landing.classList.add('exit');
+      document.body.classList.add('entering');
+      setTimeout(() => {
+        landing.classList.add('hidden');
+        scrollView.classList.remove('hidden');
+        document.body.classList.remove('entering');
+      }, 900);
     });
 
     const gradientStart = '#cfdfee';
@@ -887,7 +924,6 @@
     const tempColorStart = '#142b4d';
     const tempColorEnd = '#a13600';
     const polaroidTiltLimit = 7;
-
     function clamp01(value) {
       return Math.max(0, Math.min(1, value));
     }
@@ -1000,6 +1036,7 @@
         const progress = index / maxIndex;
         const section = document.createElement('div');
         section.className = 'memory-section';
+        section.setAttribute('data-index', index);
 
         const container = document.createElement('div');
 
@@ -1030,14 +1067,14 @@
 
         scrollInner.appendChild(section);
       });
+      handleScroll();
     }
 
     function handleScroll() {
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
-      const progress = scrollTop / (scrollHeight - clientHeight || 1);
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
+      const progress = scrollLeft / (scrollWidth - clientWidth || 1);
       updateScrollGradient(progress);
     }
-
     scrollContainer.addEventListener('scroll', handleScroll);
 
     function openDetail(memory) {
@@ -1144,6 +1181,8 @@
     aboutCloseBtn.addEventListener('click', () => {
       aboutOverlay.classList.add('hidden');
     });
+
+    window.addEventListener('resize', handleScroll);
 
     // Initial render
     renderScrollSections();
