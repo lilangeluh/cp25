@@ -1,0 +1,216 @@
+.navbar {
+    display: flex;
+    width: 90vw;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: .75rem;
+
+    .home {
+        display: flex;
+        padding: 0.75rem;
+        border-radius: 25px;
+        border: 3px dashed black;
+        font-family: "Pixelify Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+        font-size: 20px;
+    }
+
+    .nav-links {
+        display: flex;
+        width: 50%;
+        justify-content: space-evenly;
+        align-items: center;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 500;
+        font-style: normal;
+        font-size: 20px;
+    }
+
+    .nav-link {
+        text-decoration: none;
+
+        &:visited {
+            color: black;
+        }
+
+        &:link {
+            color: black;
+        }
+
+        &:hover {
+            color: #298D57;
+        }
+
+        &:active {
+            color: #298D57;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+    }
+
+    .phone-nav{
+        display: none;
+    }
+
+    .hidden{
+        display: none;
+    }
+}
+
+.guides {
+    position: relative;
+
+    .guide-box {
+        position: absolute;
+        visibility: hidden;
+        right: 0;
+        padding-top: 0.25rem;
+        background-color: white;
+        min-width: 150px;
+        border: 1px solid black;
+        text-align: right;
+        padding-left: 1.25rem;
+        padding-right: 0.5rem;
+        padding-bottom: 0.3rem;
+
+        a {
+            font-size: 16px;
+            font-family: "IBM Plex Mono", monospace;
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+
+            &:visited {
+                color: black;
+            }
+
+            &:link {
+                color: black;
+            }
+
+            &:hover {
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
+        }
+    }
+
+    &:hover {
+        .guide-box {
+            visibility: visible;
+        }
+    }
+}
+
+@media (max-width: 1280px) {
+    .navbar{
+        .home{
+            font-size: 18px;
+        }
+        .nav-links{
+            font-size: 18px;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .navbar{
+        .home{
+            font-size: 16px;
+        }
+        .nav-links{
+            font-size: 16px;
+        }
+    }
+}
+
+@media (max-width: 950px) {
+    .navbar .nav-links{
+        width: 70%;
+    }
+}
+
+@media (max-width: 764px) {
+    .navbar{
+        z-index: 1;
+        .home{
+            padding: .5rem;
+            z-index: 2;
+        }
+
+        .nav-links{
+            display: none;
+        }
+        
+        .phone-nav{
+            visibility: visible;
+            display: flex;
+            flex-direction: column;
+            gap: .25rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close{
+            display: block;
+            z-index: 2;
+        }
+
+        .hidden{
+            display: none;
+        }
+
+        .show{
+            align-items: center;
+            background-color: #FFFCF2;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            left: 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            gap: 2.5rem;
+
+            .main{
+                align-items: center;
+                background-color: #FFFCF2;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                justify-content: center;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                gap: 2.5rem;
+            }
+
+            .nav-guide{
+                align-items: center;
+                background-color: #FFFCF2;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                justify-content: center;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                gap: 2.5rem;
+            }
+
+            a{
+                font-family: "IBM Plex Mono", monospace;
+                font-weight: 600;
+                font-style: normal;
+                font-size: 30px;
+            }
+        }
+    }
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 - Clock</title>
+  <link rel="stylesheet" href="clock.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+  <div class="container">
+    
+    <!-- PST Section -->
+    <div class="section" id="pst-section">
+      <button class="about-button" onclick="window.location.href='about.html'">✦</button>
+      <div class="content">
+         
+        <div class="timezone">Los Angeles</div>
+        <div class="date" id="pst-date"></div>
+        <div class="analog-clock" id="pst-clock">
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="clock-center"></div>
+          <div class="marker top"></div>
+          <div class="marker right"></div>
+          <div class="marker bottom"></div>
+          <div class="marker left"></div>
+          <div class="digital-clock" id="pst-digital"></div>
+
+        </div>
+        <div class="typewriter-box">
+          <div class="typewriter" id="pst-text"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CST Section -->
+    <div class="section" id="cst-section">
+      <div class="content">
+        <div class="timezone">Singapore</div>
+        <div class="date" id="cst-date"></div>
+        <div class="analog-clock" id="cst-clock">
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="clock-center"></div>
+          <div class="marker top"></div>
+          <div class="marker right"></div>
+          <div class="marker bottom"></div>
+          <div class="marker left"></div>
+          <div class="digital-clock" id="cst-digital"></div>
+
+        </div>
+        <div class="typewriter-box">
+          <div class="typewriter" id="cst-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--
+  <footer>
+    <p>&copy; 2025 - Angela Zhang</p>
+  </footer>
+  -->
+
+  <script src="clock.js"></script>
+</body>
+</html>

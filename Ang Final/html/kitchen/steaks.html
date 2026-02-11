@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kekekekekeke</title>
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/navbar.css">
+    <link rel="stylesheet" href="../../css/footer.css">
+    <link rel="stylesheet" href="../../css/recipe.css">
+    <link rel="stylesheet" href="../../css/steak.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Pixelify+Sans:wght@400..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar" id="navbar">
+        <a class="home nav-link" href="../home.html">
+            ang's kitchen
+        </a>
+        <div class="nav-links">
+            <a href="../kitchen.html" class="nav-link"
+                style="text-decoration: underline; text-underline-offset: 3px; color: #298D57;">KITCHEN</a>
+            <a href="../bakery.html" class="nav-link">BAKERY</a>
+            <a href="../grandmas.html" class="nav-link">GRANDMA'S KITCHEN</a>
+            <div class="guides">
+                <a href="../guides.html" class="nav-link">
+                    GUIDES
+
+                </a>
+                <div class="guide-box">
+                    <a href="../jp-guide.html">JAPAN 2023-24</a>
+                    <a href="../sg-guide.html">SINGAPORE 2023</a>
+                </div>
+            </div> <a
+                href="https://open.spotify.com/user/angelazhang0520?si=4f5cc3ea6d25455c&nd=1&dlsi=4264a900cb90408a">
+                <img src="../../public/spotify.svg" />
+            </a>
+            <a href="https://www.instagram.com/angeluh.jpg">
+                <img src="../../public/instagram.svg" />
+            </a>
+        </div>
+
+        <div class="phone-nav" onclick="toggleNavbar()" id="open">
+            <div style="width: 30px; height: 1px; background-color: black;"></div>
+            <div style="width: 30px; height: 1px; background-color: black;"></div>
+            <div style="width: 30px; height: 1px; background-color: black;"></div>
+        </div>
+        <div class="hidden" id="close" onclick="toggleNavbar()">
+            <img src="../../close.svg" />
+        </div>
+
+        <div id="navbarMenu" class="hidden">
+            <div class="main" id="main">
+                <a href="../kitchen.html" class="nav-link">KITCHEN</a>
+                <a href="../bakery.html" class="nav-link">BAKERY</a>
+                <a href="../grandmas.html" class="nav-link">GRANDMA'S KITCHEN</a>
+                <a onclick="toggleGuide()">GUIDES &gt;</a>
+            </div>
+            <div class="hidden" id="guide">
+                <a onclick="toggleGuide()">&lt;</a>
+                <a href="../jp-guide.html" class="nav-link">JAPAN 2023-24</a>
+                <a href="../sg-guide.html" class="nav-link">SINGAPORE 2023</a>
+            </div>
+        </div>
+    </div>
+    <div style="width: 100%; border: 1px solid black; height: 1px; background-color: black; padding: 0px;"></div>
+
+    <!-- HEAD CONTAINER -->
+    <div class="heading-container">
+        <div class="text-side">
+            <h1>DAD'S
+                FAVORITE
+                STEAK</h1>
+            <p class="description">
+                Seared to medium-rare perfection, this ribeye steak is drenched in
+                buttery garlic herb goodness, just the way dad
+                likes it—bold and unapologetically flavorful.
+            </p>
+        </div>
+        <div class="ingredients">
+            <p>Ingredients</p>
+            <div class="grid">
+                <div class="steak">
+                    <img src="../../public/kitchen/steak/1a.png" class="img-size" />
+                    <p>1lb ribeye steak</p>
+                </div>
+                <div class="butter">
+                    <img src="../../public/kitchen/steak/1b.png" class="img-size" />
+                    <p>3 tbsp butter</p>
+                </div>
+                <div class="garlic">
+                    <img src="../../public/kitchen/steak/1c.png" class="img-size" />
+                    <p>4 cloves of garlic</p>
+                </div>
+                <div class="snp">
+                    <img src="../../public/kitchen/steak/1d.png" class="img-size" />
+                    <p>salt & pepper</p>
+                </div>
+                <div class="italian">
+                    <img src="../../public/kitchen/steak/1e.png" class="img-size" />
+                    <p>italian seasoning</p>
+                </div>
+                <div class="rosemary">
+                    <img src="../../public/kitchen/steak/1f.png" class="img-size" />
+                    <p>rosemary</p>
+                </div>
+                <div class="thyme">
+                    <img src="../../public/kitchen/steak/1g.png" class="img-size" />
+                    <p>thyme</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 90%; border: 0.5px solid black; height: 1px; background-color: black;"></div>
+
+    <!-- INSTRUCTIONS -->
+    <div class="instruction-manual">
+        <img src="../../public/kitchen/steak/steak png.png" class="photo" />
+        <div class="instructions">
+            <h2>Instructions</h2>
+            <div class="instruction-grid">
+                <div class="instruction">
+                    <p class="instruction-number">1.</p>
+                    <p>Pat steak dry with paper towels. Season both sides
+                        generously with salt, pepper, and Italian seasoning.
+                    </p>
+                </div>
+                <div class="instruction">
+                    <p class="instruction-number">2.</p>
+                    <p>Pour oil into a cast iron pan. Once heated, lay the
+                        steak into the pan away from you.
+                    </p>
+                </div>
+                <div class="instruction">
+                    <p class="instruction-number">3.</p>
+                    <p>Add in silken tofu block, break into pieces carefully
+                        with a spatula. Mix gently.
+                    </p>
+                </div>
+                <div class="instruction">
+                    <p class="instruction-number">4.</p>
+                    <p>Season with chicken bouillon, sugar,
+                        salt + pepper, and sesame oil. Turn heat to low.
+                    </p>
+                </div>
+                <div class="instruction">
+                    <p class="instruction-number">5.</p>
+                    <p>In a small bowl, combine corn starch with water 1:2 ratio.
+                        Mix well and gently pour this mixture into the pot.
+                    </p>
+                </div>
+                <div class="instruction">
+                    <p class="instruction-number">6.</p>
+                    <p>Add garnishes of sesame seeds and scallions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="width: 100%; border: 1px solid black; height: 1px; background-color: black;"></div>
+    <div class="footer">
+        <p>© 2024 ang's kitchen</p>
+        <p class="disappear">powered by many blocks of egg tofu &lt;3</p>
+    </div>
+    <script src="../../js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Along SVG Path with Marquee Effect</title>
+    <style>
+    </style>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Pixelify+Sans:wght@400..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar" id="navbar">
+        <a class="home nav-link" href="./home.html">
+            ang's kitchen
+        </a>
+        <div class="nav-links">
+            <a href="kitchen.html" class="nav-link">KITCHEN</a>
+            <a href="bakery.html" class="nav-link">BAKERY</a>
+            <a href="grandmas.html" class="nav-link">GRANDMA'S KITCHEN</a>
+            <div class="guides">
+                <a href="guides.html" class="nav-link">
+                    GUIDES
+
+                </a>
+                <div class="guide-box">
+                    <a href="./jp-guide.html">JAPAN 2023-24</a>
+                    <a href="./sg-guide.html">SINGAPORE 2023</a>
+                </div>
+            </div>
+            <a href="https://open.spotify.com/user/angelazhang0520?si=4f5cc3ea6d25455c&nd=1&dlsi=4264a900cb90408a">
+                <img src="../public/spotify.svg" />
+            </a>
+            <a href="https://www.instagram.com/angeluh.jpg">
+                <img src="../public/instagram.svg" />
+            </a>
+        </div>
+    </div>
+    <div style="width: 100%; border: 1px solid black; height: 1px; background-color: black;"></div>
+
+
+    <!-- HELLO -->
+    <div>
+        <div>
+            <h1>
+                HELLO!
+            </h1>
+            <p class="">
+                Welcome to Ang's Kitchen. This little space on the web is where I share my favorite recipes—from the
+                comforting dishes
+                my grandma taught me to the creations I've whipped up in my own kitchen. It's a place filled with the
+                flavors that mean
+                the most to me, and I hope they'll find a special place in your heart (and your kitchen) too &lt;3
+            </p>
+        </div>
+        <img />
+    </div>
+
+    <!-- MMMMMMMM 1 -->
+    <svg width="100%" height="260" viewBox="0 0 1447 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="myPath"
+                d="M1 174.562C351.702 39.4769 448.102 6.41114 476.5 4.00003C582.5 -4.99989 596.503 5.42101 695 33C704.479 35.6541 1032.66 156.496 1026.5 155.062C1143 195 1204.33 183.458 1272 155.062C1306.57 140.556 1443.33 83.9635 1446 83.0621" />
+        </defs>
+        <text style="fill:black;font-size:50px;" class="marquee">
+            <textPath class="marquee textPath" href="#myPath" startOffset="0%">
+                Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm
+                <animate attributeName="startOffset" from="-200%" to="100%" begin="0s" dur="15s"
+                    repeatCount="indefinite"></animate>
+            </textPath>
+        </text>
+    </svg>
+
+    <!-- ABOUT -->
+    <div>
+        <h1>ABOUT</h1>
+        <div>
+            <p>
+                Ang's Kitchen is a place born from a deep love for food and cherished memories from my grandma's
+                cooking. This website
+                is my personal collection of recipes that hold a special place in my heart. It's where I share the
+                warmth of my kitchen
+                and the stories behind each dish, from comforting family classics to new favorites I've discovered along
+                the way.
+                <br /><br />
+                Beyond my own recipes, you'll also find a carefully curated <b>Guides</b> section. Here, I've documented
+                my favorite food spots
+                from recent travels to Singapore and Japan—places so memorable that I had to write them down to share
+                with you and
+                remember for future adventures. This site isn't just for me; it's for my family, my friends, and for
+                you—whether you're
+                looking for inspiration in the kitchen or your next culinary adventure abroad. So, let's embark on this
+                delicious
+                journey together, creating and discovering joy one bite at a time.
+            </p>
+
+            <img />
+        </div>
+    </div>
+
+    <!-- MMMMMMM 2 -->
+    <svg width="100%" height="260" viewBox="0 0 1447 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path id="myPath"
+                d="M1 174.562C351.702 39.4769 448.102 6.41114 476.5 4.00003C582.5 -4.99989 596.503 5.42101 695 33C704.479 35.6541 1032.66 156.496 1026.5 155.062C1143 195 1204.33 183.458 1272 155.062C1306.57 140.556 1443.33 83.9635 1446 83.0621" />
+        </defs>
+        <text style="fill:black;font-size:50px;" class="marquee">
+            <textPath class="marquee textPath" href="#myPath" startOffset="0%">
+                Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm Mm Mmm Mmmmmmm
+                <animate attributeName="startOffset" from="100%" to="-100%" begin="0s" dur="10s"
+                    repeatCount="indefinite"></animate>
+            </textPath>
+        </text>
+    </svg>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>© 2024 ang's kitchen</p>
+        <p>powered by many blocks of egg tofu &lt;3</p>
+    </div>
+</body>
+
+</html>

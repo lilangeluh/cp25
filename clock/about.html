@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About This Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Kode Mono", monospace;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(180deg, #A9C4C3, #A4AFC7, #787D9A);
+      color: white;
+    }
+    
+    .container {
+      max-width: 800px;
+      padding: 20px;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    
+    p {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    
+  .about-button {
+  position: fixed;
+  top: 5px;
+  left: 10px;
+  background: none;
+  border: none;
+  padding: 15px;
+  font-size: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, background 0.3s;
+  color: #242424;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-button:hover {
+  color: white;
+  background: none;
+  transform: rotate(-180deg);
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="about-button" onclick="window.location.href='clock.html'">✦</button>
+
+    <h1>About This Project</h1>
+    <p>
+      Since 2015, my dad and I have spent much of our time living in different time zones. Even with the jet lag and the
+      challenges of work schedules, he used to visit me in the United States every month. But after the pandemic,
+      flights between China and the U.S. became far less frequent. Now, he can only make the trip every two or three
+      months, and each visit lasts just about two weeks. Like many families separated by distance, we’ve had to find
+      ways to stay connected despite being thousands of miles apart.
+    </p>
+    <!--
+    <p>
+      Over the past decade, I’ve deeply missed spending time with both my parents together. My dad often talks about how
+      he wishes he’d had more time to watch me grow up. This sense of missed moments is something we both feel keenly.
+      Given the time difference between Asia and the United States, we usually have just a brief window—five or six
+      hours each day—when our waking hours overlap and we can hop on a call.
+    </p>
+    -->
+    <p>
+      This project is an exploration on how our lives play out in parallel on opposite sides of the Pacific Ocean.
+      It’s a reflection of time, distance, and the connections that endure despite these separations. By visualizing our
+      daily rhythms and moments that intersect, I hope to create something that not only captures our story, but also
+      resonates with others who’ve experienced the challenge of staying close across time zones.
+    </p>
+  </div>
+</body>
+</html>

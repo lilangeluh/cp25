@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kekekekekeke</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/recipe.css">
+    <link rel="stylesheet" href="../css/sg-guide.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Pixelify+Sans:wght@400..700&display=swap"
+        rel="stylesheet">
+    <style>
+        .nav-link-guide{
+            text-decoration: none;
+            &:visited{
+                color: black;
+            }
+            &:link{
+                color: black;
+            }
+            &:hover{
+                color: #448AFA;
+            }
+            &:active{
+                color: #448AFA;
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HERO IMAGE -->
+    <div class="header-image">
+        <!-- NAVBAR -->
+        <div class="navbar" id="navbar" style="z-index: 2;">
+            <a class="home nav-link-guide" href="./home.html">
+                ang's kitchen
+            </a>
+            <div class="nav-links">
+                <a href="./kitchen.html" class="nav-link-guide">KITCHEN</a>
+                <a href="./bakery.html" class="nav-link-guide">BAKERY</a>
+                <a href="./grandmas.html" class="nav-link-guide">GRANDMA'S KITCHEN</a>
+                <div class="guides">
+                    <a style="text-decoration: 1px underline; text-underline-offset: 3px; color: #448AFA">
+                        GUIDES
+                    </a>
+                    <div class="guide-box">
+                        <a href="./jp-guide.html">
+                            JAPAN 2023-24</a>
+                        <a href="./sg-guide.html"style="text-decoration: 1px underline; text-underline-offset: 3px;">SINGAPORE 2023</a>
+                    </div>
+                </div> <a
+                    href="https://open.spotify.com/user/angelazhang0520?si=4f5cc3ea6d25455c&nd=1&dlsi=4264a900cb90408a">
+                    <img src="../public/spotify.svg" />
+                </a>
+                <a href="https://www.instagram.com/angeluh.jpg">
+                    <img src="../public/instagram.svg" />
+                </a>
+            </div>
+
+            <div class="phone-nav" onclick="toggleNavbar()" id="open">
+                <div style="width: 30px; height: 1px; background-color: black;"></div>
+                <div style="width: 30px; height: 1px; background-color: black;"></div>
+                <div style="width: 30px; height: 1px; background-color: black;"></div>
+            </div>
+            <div class="hidden" id="close" onclick="toggleNavbar()">
+                <img src="../close.svg" />
+            </div>
+
+            <div id="navbarMenu" class="hidden">
+                <div class="main" id="main">
+                    <a href="./kitchen.html" class="nav-link">KITCHEN</a>
+                    <a href="./bakery.html" class="nav-link">BAKERY</a>
+                    <a href="./grandmas.html" class="nav-link">GRANDMA'S KITCHEN</a>
+                    <a onclick="toggleGuide()">GUIDES &gt;</a>
+                </div>
+                <div class="hidden" id="guide">
+                    <a onclick="toggleGuide()">&lt;</a>
+                    <a href="./jp-guide.html" class="nav-link">JAPAN 2023-24</a>
+                    <a href="./sg-guide.html" class="nav-link"style="text-decoration: 1px underline; text-underline-offset: 3px;">
+                        SINGAPORE 2023</a>
+                </div>
+            </div>
+        </div>
+        <div
+            style="width: 100%; border: 1px solid black; height: 1px; background-color: black; padding: 0px; z-index: 1;">
+        </div>
+
+        <!-- HEADING CONTENT -->
+        <div class="header-container">
+            <div class="text-container">
+                <h1>Ang's SINGAPORE Flavor journey</h1>
+                <p>food in singapore just hits different man</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Letter? -->
+    <div class="introduction">
+        <p>
+            I called Singapore home for two whole months in the summer of 2023, and I spent every day eating my way across this
+            vibrant island. This guide spills the beans on all the places I loved, from bustling hawker centers buzzing with energy
+            to serene resturants that offer a quiet escape from the city's hustle. Singapore's mix of flavors is as vibrant as its
+            multicultural streets, and I'm excited to lead you straight to the best bites. Get ready to fill up on everything from
+            tangy Laksa to sweet kaya toasts that will tantalize your taste buds and leave you craving more. </p>
+    </div>
+
+    
+
+    <!-- FOOTER -->
+    <div style="width: 100%; border: 1px solid black; height: 1px; background-color: black;"></div>
+    <div class="footer">
+        <p>© 2024 ang's kitchen</p>
+        <p class="disappear">powered by many blocks of egg tofu &lt;3</p>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

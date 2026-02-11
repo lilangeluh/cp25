@@ -1,0 +1,195 @@
+.intro-link {
+    text-decoration: none;
+
+    &:visited {
+        color: black;
+    }
+
+    &:link {
+        color: black;
+    }
+
+    &:hover {
+        color: #298D57;
+    }
+
+    &:active {
+        color: #298D57;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.heading-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 90vw;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    height: auto;
+    position: relative;
+    gap: 3rem;
+
+    .text-side{
+        width: 40%;
+        height: auto;
+        h1{
+            font-family: "Pixelify Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 600;
+            font-style: normal;
+            font-size: 100px;
+            color: #298D57;
+            margin: 0px;
+        }
+
+        .description{
+            font-family: "IBM Plex Mono", monospace;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 18px;
+        }
+    }
+    
+    .ingredients{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        flex: 1;
+        font-family: "Pixelify Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 500;
+        font-style: normal;
+        font-size: 30px;
+        color: #298D57;
+    }
+}
+
+.instruction-manual{
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    padding-bottom: 5rem;
+
+    .photo{
+        width: max(300px, 40%);
+    }
+
+    .instructions{
+        width: 60%;
+        h2 {
+            font-family: "Pixelify Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 30px;
+            color: #298D57;
+        }
+        
+        .instruction-grid{
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 1rem;
+
+            .instruction{
+                align-items: center;
+                display: flex;
+                justify-content: start;
+                gap: 1rem;
+                text-align: left;
+                
+                p{
+                    font-family: "IBM Plex Mono", monospace;
+                    font-weight: 400;
+                    font-style: normal;
+                    font-size: 14px;
+                }
+                
+                .instruction-number{
+                    font-family: "Pixelify Sans", sans-serif;
+                    font-optical-sizing: auto;
+                    font-weight: 700;
+                    font-style: normal;
+                    font-size: 40px;
+                    margin-bottom: 0.5rem;
+                    margin-top: 0.5rem;
+                    color: #298D57;
+                }
+            }
+        }
+    }   
+}
+
+.img-size{
+    width: 150px;
+}
+
+@media (max-width: 1180px) {
+    .img-size{
+        width: 100px;
+    }
+
+    .heading-container{
+        .text-side{
+            h1{
+                font-size: 84px;
+            }
+        }
+    }
+
+    .ingredients {
+        .grid {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 1rem;
+        }
+    }
+}
+
+@media (max-width: 950px) {
+    .heading-container{
+        .text-side{
+            width: fit-content;
+        }
+    }
+}
+
+@media (max-width: 835px) {
+    .instruction-manual .instructions{
+        width: 100%;
+    }
+}
+
+@media(max-width: 640px){
+    
+    .heading-container {
+        gap: .5rem;
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+        .text-side{
+            h1{
+                font-size: 48px
+            }
+            .description{
+                font-size: 14px;
+            }
+        }
+    }
+
+    .instruction-manual .instructions .instruction-grid .instruction{
+        p{
+            font-size: 12px
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .instruction-manual .instructions .instruction-grid{
+        grid-template-columns: auto;
+    }
+}

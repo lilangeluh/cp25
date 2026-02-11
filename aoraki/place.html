@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Aoraki</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&family=Gilda+Display&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <!-- CSS -->
+  <link rel="stylesheet" href="place.css" />
+  <!-- JS -->
+  <script
+    defer
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script defer src="place.js"></script>
+  <link rel="icon" type="image/jpeg" href="../images/mountain.png">
+
+
+</head>
+<body>
+  <!-- Hamburger Menu for Mobile -->
+  <div class="hamburger-menu">
+    <button id="hamburger-btn">☰</button>
+    <div class="hamburger-options">
+      <a href="#" data-info="peak">Aoraki</a>
+      <a href="#" data-info="mid-altitude">Mt Sefton &amp; The Tasman Glacier</a>
+      <a href="#" data-info="lower-altitude">Hooker Valley</a>
+    </div>
+  </div>
+
+  <!-- First Background Image -->
+  <div class="background-section" id="bg1">
+    <h1 class="title">Aoraki</h1>
+  </div>
+
+  <!-- Markers for First Background (Desktop Only) -->
+  <div class="marker-container">
+    <div class="marker" data-info="peak" style="top: 40%; left: 65%;"></div>
+    <div class="marker" data-info="mid-altitude" style="top: 43%; left: 27%;"></div>
+    <div class="marker" data-info="lower-altitude" style="top: 65%; left: 50%;"></div>
+  </div>
+
+  <!-- Information Panel -->
+  <div class="info-panel" id="info-panel">
+    <button class="close-btn" id="close-btn">×</button>
+    <div id="info-content">
+      <h2 id="info-title">Information</h2>
+      <div id="info-description">
+        <p>Select a marker or menu option to learn more about this area of Mount Cook.</p>
+      </div>
+      <div class="info-images"></div>
+    </div>
+  </div>
+  
+    <!--
+    <div class="heading-scatter">
+    <h2 class="section-heading">Memories From December</h2>
+    </div>
+    -->
+
+  <!-- Map Section -->
+  <section class="scattered-section">
+    <h2 class="map-section-title">Memory Map</h2>
+    <div class="map-wrap">
+      <div id="scatter-map" aria-label="Interactive map of Aoraki / Mount Cook area"></div>
+    </div>
+  </section>
+
+  <!-- Pop-up for Scattered Images (Desktop Only) -->
+  <div class="scatter-popup" id="scatter-popup">
+    <div class="scatter-content">
+      <span class="scatter-coords" id="scatter-coords"></span>
+      <h3 class="scatter-location" id="scatter-location">Location Title</h3>
+      <img src="" alt="Popup" id="scatter-img" />
+      <p class="scatter-caption" id="scatter-caption"></p>
+    </div>
+  </div>
+
+  <!-- Timeline Section -->
+  <section class="timeline-section">
+    <h2>Climbing History</h2>
+    <div class="timeline">
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1642</span>
+        <div class="timeline-content">
+          <p>
+            Aoraki was possibly sighted by Abel Tasman and his crew, marking one of the earliest European encounters.
+          </p>
+          <img class="timeline-img" src="../images/T1.jpg" alt="1642 Event">
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1851</span>
+        <div class="timeline-content">
+          <p>
+            Captain John Lort Stokes of HMS Acheron named the mountain “Mount Cook.”
+          </p>
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1882</span>
+        <div class="timeline-content">
+          <p>
+            An early attempt by Rev. William S. Green, Emil Boss, and Ulrich Kaufmann came within a few feet of the summit.
+          </p>
+          <img class="timeline-img" src="../images/T3.jpg" alt="1882 Event">
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1894</span>
+        <div class="timeline-content">
+          <p>
+            Tom Fyfe, Jack Clarke, and George Graham reached the summit via the Hooker Valley and north ridge.
+          </p>
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1895</span>
+        <div class="timeline-content">
+          <p>
+            Matthias Zurbriggen made the second ascent from the Tasman Glacier side—the first solo effort.
+          </p>
+          <img class="timeline-img" src="../images/T5.jpg" alt="1895 Event">
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1910</span>
+        <div class="timeline-content">
+          <p>
+            Freda Du Faur became the first woman to reach the summit.
+          </p>
+          <img class="timeline-img" src="../images/T6.jpg" alt="1910 Event">
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1948</span>
+        <div class="timeline-content">
+          <p>
+            Sir Edmund Hillary achieved his first ascent of Mount Cook and pioneered a new route on the South Ridge.
+          </p>
+          <img class="timeline-img" src="../images/T7.jpg" alt="1948 Event">
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1991</span>
+        <div class="timeline-content">
+          <p>
+            An avalanche caused 10 metres to be lost off the top; the height was reduced by another 30 m to 3,724 m.
+          </p>
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <span class="timeline-date">1998</span>
+        <div class="timeline-content">
+          <p>
+            The Ngāi Tahu Claims Settlement Act officially recognised the original name, renaming the mountain Aoraki / Mount Cook.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Minimal Footer -->
+  <footer>
+    <p>Angela Zhang - 2025</p>
+  </footer>
+</body>
+</html>

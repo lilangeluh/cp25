@@ -1,0 +1,144 @@
+.steak{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    left: 35%;
+    top: 50%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+.butter{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    left: 10%;
+    top: 75%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+.garlic{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    left: 10%;
+    top: 25%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+.snp{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    right: 10%;
+    top: 75%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+
+.italian{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    left: 35%;
+    top: 80%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+
+.thyme{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    right: 10%;
+    top: 25%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+.rosemary{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    left: 50%;
+    top: 10%;
+
+    p{
+        margin: 0px;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        color: black;
+    }
+}
+
+@media (max-width: 1180px) {
+    .steak, .butter, .garlic, .italian, .rosemary, .snp, .thyme{
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+    }
+}

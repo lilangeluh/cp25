@@ -1,0 +1,227 @@
+.header-image {
+    width: 100%;
+    height: auto;
+    background-image: url('../public/guides-japan/header image.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 5rem;
+}
+
+.header-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .text-container {
+        width: 90%;
+        z-index: 1;
+        h1 {
+            width: 60%;
+            font-family: "Pixelify Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 600;
+            font-style: normal;
+            font-size: 90px;
+            color: white;
+            text-shadow: -6px 0 #448AFA, 0 6px #448AFA, 6px 0 #448AFA, 0 -6px #448AFA;
+        }
+
+        p {
+            font-family: "IBM Plex Mono", monospace;
+            font-weight: 600;
+            font-style: normal;
+            font-size: 20px;
+            color: white;
+        }
+    }
+
+}
+
+.introduction{
+    width: max(300px, 42.5vw);
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+
+.city{
+    font-family: "Pixelify Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 55px;
+    color: #448AFA;
+}
+
+.guide-container{
+    display: flex;
+    flex-direction: column;
+    width: 75vw;
+    gap: 3rem;
+}
+
+.location{
+    font-family: "Pixelify Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 25px;
+}
+
+.description{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+}
+
+.image-contain{
+    width: 100%;
+    object-fit: contain;
+}
+
+.image-cover{
+    width: 100%;
+    object-fit: cover;
+}
+
+.box{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
+    border: 2px solid #448AFA;
+    padding: 1rem;
+    text-align: center;
+}
+
+.cafe-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .container-1{
+        width: max(300px, 45%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .container-2{
+        width: max(300px, 45%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.cero-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: space-between;
+    .container-1{
+        width: max(400px, 40%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+    }
+    .container-2{
+        width: max(400px, 55%);
+    }
+}
+
+.ushigoro-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: space-between;
+    .container-1{
+        width: max(400px, 30%);
+    }
+    .container-2{
+        width: max(400px, 60%);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}
+
+.double-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .inoichi{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        width: max(47.5%, 300px);
+        text-align: left;
+    }
+    .warai{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        width: max(47.5%, 300px);
+    }
+}
+
+.ogari-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    .container-1{
+        width: max(300px, 45%);
+        display: flex;
+        flex-direction: column;
+        justify-self: space-between;
+    }
+    .container-2{
+        width: max(300px, 45%);
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
+
+@media (max-width: 1280px) {
+    .header-container .text-container h1{
+        width: 80%;
+    }
+}
+
+
+@media (max-width: 900px) {
+    .header-container .text-container h1{
+        width: 100%;
+        font-size: 80px;
+    }
+}
+
+
+@media (max-width: 620px) {
+    .header-container .text-container h1{
+        width: 100%;
+        font-size: 64px;
+    }
+}
+
+@media (max-width: 620px) {
+    .header-container .text-container h1{
+        width: 100%;
+        font-size: 48px;
+    }
+}

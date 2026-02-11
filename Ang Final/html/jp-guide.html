@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kekekekekeke</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/recipe.css">
+    <link rel="stylesheet" href="../css/jp-guide.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Pixelify+Sans:wght@400..700&display=swap"
+        rel="stylesheet">
+    <style>
+        .nav-link-guide {
+            text-decoration: none;
+    
+            &:visited {
+                color: black;
+            }
+    
+            &:link {
+                color: black;
+            }
+    
+            &:hover {
+                color: #448AFA;
+            }
+    
+            &:active {
+                color: #448AFA;
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HERO IMAGE -->
+    <div class="header-image">
+        <!-- NAVBAR -->
+        <div class="navbar" id="navbar" style="z-index: 2;">
+            <a class="home nav-link-guide" href="./home.html">
+                ang's kitchen
+            </a>
+            <div class="nav-links">
+                <a href="./kitchen.html" class="nav-link-guide">KITCHEN</a>
+                <a href="./bakery.html" class="nav-link-guide">BAKERY</a>
+                <a href="./grandmas.html" class="nav-link-guide">GRANDMA'S KITCHEN</a>
+                <div class="guides">
+                    <a style="text-decoration: 1px underline; text-underline-offset: 3px; color: #448AFA">
+                        GUIDES
+                    </a>
+                    <div class="guide-box">
+                        <a href="./jp-guide.html"
+                            style="text-decoration: 1px underline; text-underline-offset: 3px;">JAPAN 2023-24</a>
+                        <a href="./sg-guide.html">SINGAPORE 2023</a>
+                    </div>
+                </div> <a
+                    href="https://open.spotify.com/user/angelazhang0520?si=4f5cc3ea6d25455c&nd=1&dlsi=4264a900cb90408a">
+                    <img src="../public/spotify.svg" />
+                </a>
+                <a href="https://www.instagram.com/angeluh.jpg">
+                    <img src="../public/instagram.svg" />
+                </a>
+            </div>
+
+            <div class="phone-nav" onclick="toggleNavbar()" id="open">
+                <div style="width: 30px; height: 1px; background-color: black;"></div>
+                <div style="width: 30px; height: 1px; background-color: black;"></div>
+                <div style="width: 30px; height: 1px; background-color: black;"></div>
+            </div>
+            <div class="hidden" id="close" onclick="toggleNavbar()">
+                <img src="../close.svg" />
+            </div>
+
+            <div id="navbarMenu" class="hidden">
+                <div class="main" id="main">
+                    <a href="./kitchen.html" class="nav-link">KITCHEN</a>
+                    <a href="./bakery.html" class="nav-link">BAKERY</a>
+                    <a href="./grandmas.html" class="nav-link">GRANDMA'S KITCHEN</a>
+                    <a onclick="toggleGuide()">GUIDES &gt;</a>
+                </div>
+                <div class="hidden" id="guide">
+                    <a onclick="toggleGuide()">&lt;</a>
+                    <a href="./jp-guide.html" class="nav-link"
+                        style="text-decoration: 1px underline; text-underline-offset: 3px;">JAPAN 2023-24</a>
+                    <a href="./sg-guide.html" class="nav-link">SINGAPORE 2023</a>
+                </div>
+            </div>
+        </div>
+        <div
+            style="width: 100%; border: 1px solid black; height: 1px; background-color: black; padding: 0px; z-index: 1;">
+        </div>
+
+        <!-- HEADING CONTENT -->
+        <div class="header-container">
+            <div class="text-container">
+                <h1>Ang's Japan culinary guide</h1>
+                <p>places i went to in Japan that were just way too good</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Letter? -->
+    <div class="introduction">
+        <p>
+            Last summer and again this spring, I wandered Japan's neon-lit streets, slurping ramen and savoring sushi right where
+            it's best. This guide is my personal notebook, filled with the spots that made me say "wow" out loud. From cozy noodle
+            joints tucked away in narrow lanes to bustling sushi bars where the fish is as fresh as the ocean breeze, here's where
+            to eat in Tokyo and Kyoto to make your trip as delicious as it is unforgettable. Join me as I share my favorite
+            discoveries, each one offering a unique slice of Japanese culinary culture.
+        </p>
+    </div>
+
+    <!-- TOKYO -->
+    <p class="city">TOKYO</p>
+    <div class="guide-container">
+        <div class="cafe-container">
+            <div class="container-1">
+                <p class="location">📍 hitoma コーヒーとお酒</p>
+                <p class="description">I discovered this hidden cafe gem with my mom while walking in the tokyo suburbs during a rain.
+                    This cozy place serves up yummy pudding with different seasonal fruits, we had it with shine muscat grapes, but they
+                    have had whole peaches before too! This is perfect for chatting up with a friend, or a quiet space to do work :D</p>
+                <img src="../public/guides-japan/cafe1.png" class="image-contain"/>
+            </div>
+            <div class="container-2">
+                <div style="width: 100%; height: max(35vh, 400px); overflow: hidden; background-image: url('../public/guides-japan/cafe2.JPG'); background-size: cover; background-position: center center;"></div>
+                <p class="box">hitoma コーヒーとお酒<br/>
+                    Japan, 〒111-0036 Tokyo, Taito City,<br/>
+                    Matsugaya, 1 Chome-13-10 安達ビル 1階</p>
+            </div>
+        </div>
+
+        <div class="cero-container">
+            <div class="container-1">
+                <div style="width: 100%; height: max(35vh, 400px); overflow: hidden; background-image: url('../public/guides-japan/cero\ 1.JPG'); background-size: cover; background-position: center center;"></div>
+                <p class="box">Ginza CERO<br/>
+                    Japan, 〒104-0061 Tokyo, Chuo City,<br/>
+                    Ginza, 7 Chome-2-20 金井ビル 2F</p>
+            </div>
+            <div class="container-2">
+                <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap:1.5rem">
+                    <div style="width: max(47.5%, 300px); height: max(35vh, 400px); overflow: hidden; background-image: url('../public/guides-japan/cero\ 2.JPG'); background-size: cover; background-position: center center;"></div>
+                    <div style="width: max(47.5%, 300px); height: max(35vh, 400px); overflow: hidden; background-image: url('../public/guides-japan/cero\ 3.JPG'); background-size: cover; background-position: center center;"></div>
+                </div>
+                <p class="location">📍Ginza Cero</p>
+                <p class="description">I was recommended this one-chef omakase restaurant by a friend. Unfortunately, I had egregious
+                    food poisoning right before we ate here, so I was not able to enjoy all the courses normally. However, my parents
+                    expressed that they enjoyed the courses, especially the sashimi and the soups. It was a cozy place and the chef only
+                    serves 10 people per night :00</p>
+            </div>
+        </div>
+
+        <div class="ushigoro-container">
+            <div class="container-1">
+                <div style="width: 100%; height: max(40vh, 300px); overflow: hidden; background-image: url('../public/guides-japan/ushigiro\ 1.JPG'); background-size: cover; background-position: center center;"></div>
+                <p class="box">
+                    USHIGORO S. Ginza <br/>
+                    1220 East Coast Parkway, <br/>
+                    Singapore 468960
+                </p>
+            </div>
+            <div class="container-2">
+                <div style="width: max(50%, 300px);">
+                    <img src="../public/guides-japan/ushigiro 2.JPG" class="image-contain"/>
+                </div>
+                <div style="width: max(47.5%, 300px);">
+                    <p class="location">📍USHIGORO S. Ginza</p>
+                    <p class="description">If you love yakiniku, this is probably one of the best places you can dine at. The layout of the
+                        restaurant is private rooms only, and you have to reserve your omakase course beforehand (make reservations EARLY!).
+                        Their different cuts of beef are super fresh, and a server will cook the meal right in front of you. 
+                        <br/><br/>
+                        I have also never seen a restaurant so generous with their truffle shavings... (this is kind of a fancy dinner tho $$$$)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KYOTO -->
+    <p class="city">KYOTO</p>
+    <div class="guide-container" style="margin-bottom: 5rem;">
+        <div class="double-container">
+            <div class="inoichi">
+                <p class="location" style="width: 100%;">📍Men-ya Inoichi</p>
+                <p class="description">This Michelin ramen shop is popular among tourists. I found their white soy sauce broth to be
+                    innovative and worth a try! Their pear water is also very refreshing. However, there is usually about an hour wait -
+                    but there are plenty of shops around while you wait!</p>
+                <div style="display: flex; width: 100%; justify-content: space-evenly; flex-wrap: wrap; gap:1.5rem">
+                    <img class="image-contain" src="../public/guides-japan/men-ya2.JPG" style="width: max(32.5%, 300px); height: auto;"/>
+                    <img class="image-contain" src="../public/guides-japan/men-ya1.jpg" style="width: max(55%, 300px); height: auto;"/>
+                </div>
+                <p class="box">
+                    Men-ya Inoichi <br/>
+                    542 Ebisunocho, Shimogyo Ward, <br/>
+                    Kyoto, 600-8033, Japan
+                </p>
+            </div>
+            <div class="warai">
+                <p class="location" style="width: 100%;">📍Nishiki Warai</p>
+                <div style="display: flex; justify-content: space-between; width: 100%; flex-wrap: wrap;">
+                    <div style="width: max(45%, 300px);">
+                        <img class="image-contain" src="../public/guides-japan/IMG_0108.JPG"/>
+                    </div>
+                    <p class="description" style="width: max(50%, 300px);">I have loved okonomiyaki ever since I was young, so it was a mission for me to find a good place
+                        in Japan. Nishiki Warai certainly did not disappoint - their portions and filling and combos are super affordable.
+                        You can also customize the toppings you want!</p>
+                </div>
+                <p class="box">
+                    Nishiki Warai <br/>
+                    Japan, 〒604-8142 Kyoto, Nakagyo <br/>
+                    Ward, Nishiuoyacho, 597
+                </p>
+            </div>
+        </div>
+        <div class="ogari-container">
+            <div class="container-1">
+                <p class="location">📍 Wagyu Volcano OAGARI</p>
+                <p class="description">A miniature mountain of Wagyu beef with an egg yolk flowing down like molten lava. Then there's
+                    the luxurious A5 Kuroge Wagyu Rice Bowl. The real magic, though, lies in the customization. Whether it's adding
+                    scallops, sea urchin, salmon, or grilled eel, crafting my own unique dish here felt like personalizing a piece of
+                    edible art. Each choice added a new layer of delight to the experience, making it truly my own.</p>
+                <div style="width: 100%; height: max(40vh, 300px); overflow: hidden; background-image: url('../public/guides-japan/ogari 2.jpeg'); background-size: cover; background-position: center 85%;"></div>
+            </div>
+            <div class="container-2">
+                <div style="width: 100%; height: max(40vh, 320px); overflow: hidden; background-image: url('../public/guides-japan/ogari.jpeg'); background-size: cover; background-position: center;"></div>
+                <p class="box" style="width: 300px">
+                    Wagyu Volcano OAGARI <br/>
+                    〒605-0074 Kyoto, Higashiyama <br/>
+                    Ward, Gionmachi Minamigawa, 537-2 <br/>
+                    Gion Hirobiru 3F
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="width: 100%; border: 1px solid black; height: 1px; background-color: black;"></div>
+    <div class="footer">
+        <p>© 2024 ang's kitchen</p>
+        <p class="disappear">powered by many blocks of egg tofu &lt;3</p>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
