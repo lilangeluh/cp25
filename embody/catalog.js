@@ -96,7 +96,6 @@ const loaderPhrases = document.querySelector(".loader__phrases");
 const loaderLabel = document.querySelector(".loader__label");
 const cursorEl = document.querySelector(".cursor");
 const gridEl = document.getElementById("catalogGrid");
-const HOLD_KEYS = "ABCDEFGHJKLMNPQRSTUVWXYZ2356789";
 
 let scrollInstance;
 
@@ -159,73 +158,31 @@ function showLoader(callback, mode = "normal") {
     return;
   }
 
-  // hold-to-progress mode
+  // slow auto-progress mode (formerly hold-to-progress)
   loaderPhrases.innerHTML = "";
-  const requiredKey = HOLD_KEYS[Math.floor(Math.random() * HOLD_KEYS.length)];
-  loaderLabel.textContent = `Hold the key “${requiredKey}” (0%)`;
+  loaderLabel.textContent = "Waiting";
   stopCycle = startPhraseCycle();
-
-  let isHolding = false;
-  let progress = 0;
-  const interval = 20;
   const duration = randomBetween(2500, 4000);
-  const increment = interval / duration;
-  let timerId = null;
-
-  const onKeyDown = (event) => {
-    const key = (event.key || "").toUpperCase();
-    if (key === requiredKey) {
-      if (!isHolding) {
-        isHolding = true;
-      }
-      startTimer();
-    }
-  };
-
-  const onKeyUp = (event) => {
-    const key = (event.key || "").toUpperCase();
-    if (key === requiredKey) {
-      isHolding = false;
-      loaderLabel.textContent = `Hold the key “${requiredKey}” (${Math.round(progress * 100)}%)`;
-    }
-  };
-
-  function startTimer() {
-    if (timerId) {
-      return;
-    }
-    timerId = setInterval(() => {
-      if (!isHolding) {
-        return;
-      }
-      progress = Math.min(progress + increment, 1);
-      loaderProgress.style.width = `${progress * 100}%`;
-       loaderLabel.textContent = `Hold the key “${requiredKey}” (${Math.round(progress * 100)}%)`;
-      if (progress >= 1) {
-        finish();
-      }
-    }, interval);
-  }
-
-  function cleanup() {
-    if (timerId) {
-      clearInterval(timerId);
-      timerId = null;
-    }
-    window.removeEventListener("keydown", onKeyDown);
-    window.removeEventListener("keyup", onKeyUp);
-    document.body.classList.remove("is-loading");
-    stopCycle();
-  }
 
   function finish() {
-    cleanup();
+    document.body.classList.remove("is-loading");
+    stopCycle();
     loaderEl.hidden = true;
     callback?.();
   }
 
-  window.addEventListener("keydown", onKeyDown);
-  window.addEventListener("keyup", onKeyUp);
+  const start = performance.now();
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    loaderProgress.style.width = `${progress * 100}%`;
+    loaderLabel.textContent = `Waiting (${Math.round(progress * 100)}%)`;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      finish();
+    }
+  }
+  requestAnimationFrame(step);
 }
 
 function populateGrid() {

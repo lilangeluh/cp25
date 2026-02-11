@@ -11,14 +11,6 @@ let v2_staffTops = [];
 
 const UI_TOP = 0, PAGE_MARGIN = 48;
 
-// ===== fonts (async) =====
-let fBytesized = null;
-let fLekton = { regular:null, bold:null, italic:null };
-let fTomorrow = { regular:null, italic:null, bold:null, light:null, semibold:null };
-
-// Tomorrow pools for V1
-const TomorrowPools = { normals: [], italics: [] };
-
 // per-version base fonts
 let fontV1 = 'Georgia', fontV2 = 'Georgia', fontV3 = 'Georgia', fontV4 = 'Georgia', fontV5 = 'Georgia';
 
@@ -62,6 +54,7 @@ The rest is metamodernity
 // ===== state =====
 let mode = 1;
 let btns = {}, shuffleBtn;
+let musicBtn, musicTrack = null;
 
 let v1_layout = [];                    // unreadable
 let v2_layout = [];                    // staff fade/rotate
@@ -88,10 +81,18 @@ function setup() {
   btns.v3 = mkBtn("3", x, y, () => setMode(3)); x += 36;
   btns.v4 = mkBtn("4", x, y, () => setMode(4)); x += 36;
   btns.v5 = mkBtn("5", x, y, () => setMode(5)); x += 36;
+  musicBtn = mkBtn("♫", x, y, toggleMusic); x += 36;
   shuffleBtn = mkBtn("reshuffle", x, y, () => { v3_shuffle(); randomizeV3Theme(true); layoutV3(); });
+  musicBtn.style('font-size', '18px');
+  musicBtn.style('width', '30px');
+  musicBtn.style('height', '30px');
+  musicBtn.style('line-height', '1');
+  musicBtn.style('padding', '0');
+  musicBtn.style('text-align', 'center');
 
   buildGrain();
-  loadFontsAsync();       // non-blocking
+  setupWebfontFallbacks();
+  loadMusic();
 
   v3_shuffle();
   randomizeV3Theme(true);
@@ -104,41 +105,22 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   const y = height - 40; let x = 12;
   Object.values(btns).forEach((b, i) => b.position(12 + 36 * i, y));
-  shuffleBtn.position(12 + 36 * 5, y);
+  musicBtn.position(12 + 36 * 5, y);
+  shuffleBtn.position(12 + 36 * 6, y);
   buildGrain();
   fitAndLayoutAll();
 }
 
-// ===== async font loader =====
-function loadFontsAsync() {
-  const tryLoad = (path, ok) => loadFont(path, f => { ok && ok(f); fontsReadyMaybe(); }, () => {});
+function setupWebfontFallbacks() {
+  // Load all three typefaces from Google Fonts via glitch.html.
+  fontV1 = 'Tomorrow';
+  fontV2 = 'Lekton';
+  fontV3 = 'Tomorrow';
+  fontV4 = 'Bytesized';
+  fontV5 = 'Lekton';
 
-  // Bytesized (V4)
-  tryLoad('fonts/Bytesized-Regular.ttf', f => { fBytesized = f; });
-
-  // Lekton (V2, V5)
-  tryLoad('fonts/Lekton-Regular.ttf', f => { fLekton.regular = f; });
-  tryLoad('fonts/Lekton-Bold.ttf',    f => { fLekton.bold    = f; });
-  tryLoad('fonts/Lekton-Italic.ttf',  f => { fLekton.italic  = f; });
-
-  // Tomorrow (V1 + V3)
-  tryLoad('fonts/Tomorrow-Regular.ttf', f => { fTomorrow.regular  = f; TomorrowPools.normals.push(f); });
-  tryLoad('fonts/Tomorrow-Italic.ttf',  f => { fTomorrow.italic   = f; TomorrowPools.italics.push(f); });
-  tryLoad('fonts/Tomorrow-Bold.ttf',    f => { fTomorrow.bold     = f; TomorrowPools.normals.push(f); });
-  tryLoad('fonts/Tomorrow-Light.ttf',   f => { fTomorrow.light    = f; TomorrowPools.normals.push(f); });
-  tryLoad('fonts/Tomorrow-SemiBold.ttf',f => { fTomorrow.semibold = f; TomorrowPools.normals.push(f); });
-
-  function fontsReadyMaybe() {
-    // assign per-version once better than Georgia is present
-    if (fontV1 === 'Georgia' && (TomorrowPools.normals.length || TomorrowPools.italics.length))
-      fontV1 = pickAnyTomorrow() || 'Georgia';
-
-    if (fontV2 === 'Georgia') fontV2 = fLekton.regular || 'Georgia';     // V2 = Lekton
-    if (fontV3 === 'Georgia') fontV3 = fTomorrow.regular || 'Georgia';   // V3 = Tomorrow
-    if (fontV4 === 'Georgia') fontV4 = fBytesized || 'Georgia';          // V4 = Bytesized
-    if (fontV5 === 'Georgia') fontV5 = fLekton.regular || 'Georgia';     // V5 = Lekton
-
-    fitAndLayoutAll();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => fitAndLayoutAll());
   }
 }
 
@@ -181,6 +163,28 @@ function mkBtn(label, x, y, onClick){
   b.style('border-radius','6px');
   b.style('background','#ffffffaa');
   return b;
+}
+function loadMusic() {
+  musicTrack = loadSound(
+    'metamodernity.mp3',
+    () => {},
+    () => { console.warn('[audio] Failed to load metamodernity.mp3'); }
+  );
+}
+async function toggleMusic() {
+  if (!musicTrack) return;
+
+  // Required in many browsers before starting WebAudio.
+  if (getAudioContext().state !== 'running') await userStartAudio();
+
+  if (musicTrack.isPlaying()) {
+    musicTrack.stop();
+    musicBtn.style('background', '#ffffffaa');
+    return;
+  }
+
+  musicTrack.play();
+  musicBtn.style('background', '#c9f0d4');
 }
 function setMode(m){
   mode = constrain(m,1,5);
@@ -251,8 +255,8 @@ function buildGrain(){
 }
 
 // ===== tomorrow helpers =====
-function pickAnyTomorrow(){ return TomorrowPools.normals[0] || TomorrowPools.italics[0] || null; }
-function pickRandomTomorrow(){ const p=[...TomorrowPools.normals,...TomorrowPools.italics]; return p.length?random(p):null; }
+function pickAnyTomorrow(){ return fontV1; }
+function pickRandomTomorrow(){ return fontV1; }
 
 // ===== V1: unreadable (Tomorrow random) =====
 function layoutV1(){
