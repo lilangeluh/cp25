@@ -22,6 +22,7 @@ body {
   background: linear-gradient(180deg, #387e9c 0%, #162e09 100%);
   color: #333;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Section Heading for Scatter Grid */
@@ -340,7 +341,7 @@ body {
 /* ========== Timeline Section ========== */
 .timeline-section {
   background: transparent;
-  padding: 4rem 0 3.8rem;
+  padding: 4rem 0 6.5rem;
 }
 .timeline {
   width: calc(100% - 80px);
@@ -349,12 +350,12 @@ body {
   align-items: center;
   gap: 4.8rem;
   overflow-x: auto;
-  overflow-y: visible;
-  padding: 0.6rem 0 1.8rem 0;
+  overflow-y: hidden;
+  padding: 1.8rem 0 3.4rem 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   position: relative;
-  min-height: 820px;
+  min-height: 980px;
 }
 .timeline::before {
   content: "";
@@ -545,8 +546,8 @@ footer {
     width: calc(100% - 40px);
     margin: 0 20px;
     gap: 3rem;
-    min-height: 720px;
-    padding: 0.4rem 0 1.4rem 0;
+    min-height: 860px;
+    padding: 1rem 0 2.4rem 0;
   }
   .timeline-item {
     flex-basis: 84vw;
