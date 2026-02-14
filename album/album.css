@@ -16,10 +16,10 @@
 }
 
 @font-face {
-  font-family: 'MagnetteTrial';
-  src: url('./MagnetteTrial-Bold.otf') format('opentype');
+  font-family: 'Neureal';
+  src: url('./NeurealTrial-Regular.otf') format('opentype');
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -86,36 +86,36 @@ body {
   position: absolute;
   top: 0;
   height: 100%;
-  width: 16px;
+  width: 26px;
   pointer-events: none;
   z-index: -1;
   border-radius: 2px;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .page-stack-left {
-  left: -14px;
+  left: -24px;
   background:
     repeating-linear-gradient(
       to right,
-      rgba(138, 130, 116, 0.45) 0px,
-      rgba(138, 130, 116, 0.45) 1px,
-      rgba(247, 241, 231, 0.82) 1px,
-      rgba(247, 241, 231, 0.82) 3px
+      rgba(120, 113, 101, 0.55) 0px,
+      rgba(120, 113, 101, 0.55) 1px,
+      rgba(248, 242, 232, 0.9) 1px,
+      rgba(248, 242, 232, 0.9) 4px
     ),
     linear-gradient(to right, rgba(70, 62, 52, 0.35), rgba(0, 0, 0, 0));
   box-shadow: inset -4px 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .page-stack-right {
-  right: -14px;
+  right: -24px;
   background:
     repeating-linear-gradient(
       to left,
-      rgba(138, 130, 116, 0.45) 0px,
-      rgba(138, 130, 116, 0.45) 1px,
-      rgba(247, 241, 231, 0.82) 1px,
-      rgba(247, 241, 231, 0.82) 3px
+      rgba(120, 113, 101, 0.55) 0px,
+      rgba(120, 113, 101, 0.55) 1px,
+      rgba(248, 242, 232, 0.9) 1px,
+      rgba(248, 242, 232, 0.9) 4px
     ),
     linear-gradient(to left, rgba(70, 62, 52, 0.35), rgba(0, 0, 0, 0));
   box-shadow: inset 4px 0 8px rgba(0, 0, 0, 0.2);
@@ -173,11 +173,23 @@ body {
   position: absolute;
   top: 16px;
   left: 18px;
-  font-family: 'MagnetteTrial', 'Cormorant Garamond', serif;
+  font-family: 'Neureal', 'Cormorant Garamond', serif;
   font-size: 0.8rem;
   letter-spacing: 0.03em;
   color: var(--text-secondary);
   opacity: 0.9;
+}
+
+.page-meta-secondary {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  font-family: 'Neureal', 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  opacity: 0.9;
+  text-align: right;
 }
 
 .photo-wrapper {
@@ -222,7 +234,7 @@ body {
 }
 
 .photo-wrapper.stacked {
-  gap: 10px;
+  gap: 16px;
   width: 100%;
   align-items: center;
   justify-content: center;

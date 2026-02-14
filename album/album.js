@@ -5,6 +5,7 @@ Page data notes:
 - for stacked: images: [{ image, ratio?, tape?, rotation?, frameWidth? }, { ... }]
 - date: top-left corner text
 - location: top-right corner text
+- meta2Date/meta2Location: optional second line on bottom-right (stacked pages)
 
 Ratio examples:
 - '3 / 4' (portrait)
@@ -13,8 +14,8 @@ Ratio examples:
 - '16 / 9' (wide)
 
 Ordering:
-- Photos are in the order listed in albumPages.
-- Because we use hidden guard pages for spread-only mode, album page index N appears at flipbook page N + 2.
+- photos are in the order listed in albumPages.
+- hidden guard pages for spread-only mode, album page index N appears at flipbook page N + 2.
 */
 
 const PAGE_TEXTURE_URL = './texture2.jpg';
@@ -23,60 +24,62 @@ const albumPages = [
   {
     type: 'photo',
     layout: 'single',
-    image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80',
-    date: 'Jun 13, 2025',
-    location: 'Brooklyn',
+    image: './images/1a.webp',
+    date: 'Jul 5, 2045',
+    location: 'San Francisco',
     ratio: '3 / 4',
     rotation: -2,
-    tape: true
+    tape: false
   },
   {
     type: 'photo',
     layout: 'stacked',
     images: [
-      { image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=900&q=80', ratio: '16 / 9', tape: false },
-      { image: 'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=900&q=80', ratio: '16 / 9', tape: true }
+      { image: './images/2a.webp', ratio: '3 / 2', tape: true },
+      { image: './images/2b.webp', ratio: '3 / 2', tape: true }
     ],
-    date: 'Jun 14, 2025',
-    location: 'Manhattan',
+    date: 'Jan 30, 2023',
+    location: 'Cardiff',
+    meta2Date: 'Mar 27, 2023',
+    meta2Location: 'Death Valley',
     rotation: 1
+
+    
   },
   {
     type: 'photo',
     layout: 'single',
-    image: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=600&q=80',
-    date: 'Jun 14, 2025',
-    location: 'Midtown',
+    image: './images/3a.webp',
+    date: 'Dec 22, 2024',
+    location: 'Lake Tekapo',
     ratio: '4 / 5',
     rotation: 0.5,
     tape: true
   },
   {
     type: 'photo',
-    layout: 'stacked',
-    images: [
-      { image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=900&q=80' },
-      { image: 'https://images.unsplash.com/photo-1522083165195-3424ed129620?w=900&q=80' }
-    ],
-    date: 'Jun 15, 2025',
-    location: 'Chelsea',
+    layout: 'single',
+    image: './images/4a.webp',
+    date: 'Dec 27, 2024',
+    location: 'Lake Wanaka',
+    ratio: '4 / 5',
+    rotation: -1
+  },
+  {
+    type: 'photo',
+    layout: 'single',
+    image: './images/5a.webp',
+    date: 'Sept 13, 2022',
+    location: 'Singapore',
     ratio: '3 / 4',
     rotation: -1
   },
   {
     type: 'photo',
     layout: 'single',
-    image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80',
-    date: 'Jun 15, 2025',
-    location: 'Chelsea',
-    rotation: -1
-  },
-  {
-    type: 'photo',
-    layout: 'single',
-    image: 'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=600&q=80',
-    date: 'Jun 15, 2025',
-    location: 'Central Park',
+    image: './images/6a.webp',
+    date: 'Sept 1, 2023',
+    location: 'Kyoto',
     ratio: '3 / 4',
     rotation: 1,
     tape: true
@@ -84,18 +87,18 @@ const albumPages = [
   {
     type: 'photo',
     layout: 'single',
-    image: 'https://images.unsplash.com/photo-1522083165195-3424ed129620?w=600&q=80',
-    date: 'Jun 16, 2025',
-    location: 'West Village',
-    ratio: '4 / 3',
+    image: './images/7a.webp',
+    date: 'Oct 3, 2022',
+    location: 'Getty Museum',
+    ratio: '3 / 4',
     rotation: -0.5
   },
   {
     type: 'photo',
     layout: 'single',
-    image: 'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=600&q=80',
-    date: 'Jun 16, 2025',
-    location: 'New York City',
+    image: './images/8a.webp',
+    date: 'Jan 4, 2022',
+    location: 'Del Mar',
     ratio: '3 / 4',
     rotation: 0,
     tape: true
@@ -161,6 +164,8 @@ function generatePageHTML(pageData) {
     case 'photo': {
       const metaParts = [pageData.date, pageData.location].filter(Boolean);
       const meta = metaParts.length ? `<span class="page-meta">${metaParts.join(' - ')}</span>` : '';
+      const meta2Parts = [pageData.meta2Date, pageData.meta2Location].filter(Boolean);
+      const meta2 = meta2Parts.length ? `<span class="page-meta-secondary">${meta2Parts.join(' - ')}</span>` : '';
 
       if (pageData.layout === 'stacked' && Array.isArray(pageData.images) && pageData.images.length) {
         const stackedFrames = pageData.images.slice(0, 2).map((item) => {
@@ -178,6 +183,7 @@ function generatePageHTML(pageData) {
         return `
           <div class="page-content">
             ${meta}
+            ${meta2}
             <div class="photo-wrapper stacked">
               ${stackedFrames}
             </div>
@@ -239,28 +245,17 @@ $(document).ready(function() {
     return Math.min(maxSpreadStart, firstSpreadPage + spreadIndex * 2);
   }
 
-  function updatePageStacks(currentPage) {
-    const totalPages = $flipbook.turn('pages');
+  function updatePageStacks() {
     const left = document.getElementById('pageStackLeft');
     const right = document.getElementById('pageStackRight');
     const book = document.getElementById('flipbook');
-
-    const leftPages = Math.max(0, currentPage - firstSpreadPage);
-    const rightPages = Math.max(0, totalPages - currentPage - 1);
-
-    const leftThickness = Math.min(40, 6 + leftPages * 2.3);
-    const rightThickness = Math.min(40, 6 + rightPages * 2.3);
-
-    left.style.width = `${leftThickness}px`;
-    right.style.width = `${rightThickness}px`;
 
     left.style.height = `${book.clientHeight}px`;
     right.style.height = `${book.clientHeight}px`;
 
     left.style.top = `${book.offsetTop}px`;
     right.style.top = `${book.offsetTop}px`;
-
-    left.style.left = `${book.offsetLeft - leftThickness + 2}px`;
+    left.style.left = `${book.offsetLeft - 24}px`;
     right.style.left = `${book.offsetLeft + book.clientWidth - 2}px`;
   }
 
@@ -302,7 +297,7 @@ $(document).ready(function() {
       turned: function(event, page) {
         updateIndicators(page);
         updateNavButtons(page);
-        updatePageStacks(page);
+        updatePageStacks();
       }
     }
   });
@@ -344,7 +339,7 @@ $(document).ready(function() {
   $flipbook.turn('page', firstSpreadPage);
   updateIndicators(firstSpreadPage);
   updateNavButtons(firstSpreadPage);
-  updatePageStacks(firstSpreadPage);
+  updatePageStacks();
 
   $(window).on('resize', function() {
     const windowWidth = $(window).width();
@@ -365,6 +360,6 @@ $(document).ready(function() {
     }
 
     $flipbook.turn('size', bookWidth, bookHeight);
-    updatePageStacks($flipbook.turn('page'));
+    updatePageStacks();
   });
 });
